@@ -1,0 +1,3 @@
+# Specify filepatterns you want git to ignore.
+YouLookGoodInPrint/**/bin/
+YouLookGoodInPrint/**/obj/

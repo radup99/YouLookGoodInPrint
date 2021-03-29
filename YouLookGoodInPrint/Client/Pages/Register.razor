@@ -1,0 +1,59 @@
+﻿@page "/register"
+@using System.Net
+@using System.Net.Http.Json
+@using YouLookGoodInPrint.Shared
+@inject HttpClient Http
+
+<h3>Register</h3>
+
+<form>
+    <fieldset>
+        <div>
+            <label for="username">User</label>
+            <input type="text" @bind="username" />
+        </div>
+
+        <div>
+            <label for="password_text">Password</label>
+            <input type="password" @bind="password" />
+        </div>
+        <div>
+            <label for="password_text">Real Name</label>
+            <input type="text" @bind="realname" />
+        </div>
+        <div>
+            <label for="password_text">E-Mail</label>
+            <input type="text" @bind="email" />
+        </div>
+    </fieldset>
+</form>
+
+<button class="btn btn-primary" @onclick="Submit">Submit</button>
+<p>@status</p>
+
+@code {
+
+    public string username = "", password = "", realname ="",
+                  email = "", status;
+
+    public async Task Submit()
+    {
+        if (username == "" || password == "")
+        {
+            status = "Fill in the form.";
+            return;
+        }
+
+        if (username.Contains(" "))
+        {
+            status = "Invalid username.";
+            return;
+        }
+
+        string hash = HashGenerator.GetHash(password);
+        RegistrationData rdata = new RegistrationData(username, hash, realname, email);
+
+        HttpResponseMessage resp = await Http.PostAsJsonAsync<RegistrationData>("Register", rdata);
+        status = resp.Content.ReadAsStringAsync().Result;
+    }
+}
