@@ -16,7 +16,6 @@ namespace YouLookGoodInPrint.Server.Entities
             if (!_created)
             {
                 _created = true;
-                Database.EnsureDeleted();
                 Database.EnsureCreated();
 
                 this.AddSampleData();
