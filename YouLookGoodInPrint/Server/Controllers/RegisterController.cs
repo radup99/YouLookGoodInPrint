@@ -8,7 +8,7 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("Register")]
     public class RegisterController : ControllerBase
     {
-        private Database database = new Database();
+        private readonly Database database = new Database();
 
         [HttpPost]
         public string Post([FromBody] RegistrationData rdata)

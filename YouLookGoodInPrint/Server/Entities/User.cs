@@ -19,7 +19,7 @@ namespace YouLookGoodInPrint.Server.Entities
             this.Id = Guid.NewGuid().ToString();
             this.Username = username;
             this.Password = password;
-            this.Token = this.GenerateToken();
+            this.Token = User.GenerateToken();
         }
 
         public User(string username, string password, string name, string email)
@@ -29,9 +29,9 @@ namespace YouLookGoodInPrint.Server.Entities
             this.Password = password;
             this.Name = name;
             this.Email = email;
-            this.Token = this.GenerateToken();
+            this.Token = User.GenerateToken();
         }
-        private string GenerateToken()
+        private static string GenerateToken()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             var token = new char[20];

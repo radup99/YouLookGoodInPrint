@@ -9,7 +9,7 @@ using YouLookGoodInPrint.Server.Entities;
 namespace YouLookGoodInPrint.Server.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20210329201449_db")]
+    [Migration("20210330211055_db")]
     partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

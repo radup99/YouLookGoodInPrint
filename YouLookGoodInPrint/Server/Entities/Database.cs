@@ -17,14 +17,12 @@ namespace YouLookGoodInPrint.Server.Entities
             {
                 _created = true;
                 Database.EnsureCreated();
-
-                this.AddSampleData();
             }
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionbuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionbuilder.UseSqlite(@"Data Source=Database.db");
+            optionsBuilder.UseSqlite(@"Data Source=Database.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
