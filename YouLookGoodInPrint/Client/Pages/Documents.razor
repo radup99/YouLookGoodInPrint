@@ -1,0 +1,67 @@
+﻿@page "/documents"
+@using System.Net.Http.Json
+@using YouLookGoodInPrint.Shared
+@inject HttpClient Http
+@inject TokenContainer tokenContainer
+
+<h3>Documents</h3>
+
+@{
+    @if (tokenContainer.Property == "null")
+    {
+        <p>You are not signed in.</p>
+    }
+
+    else if (documents == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Creation Date</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var doc in documents)
+                    {
+                        <tr>
+                            <td>@doc.Name</td>
+                            <td>@doc.CreationDate.ToShortDateString()</td>
+                            <td><button class="btn btn-primary" @onclick="() => Edit(doc.Name)">Edit</button></td>
+                        </tr>
+                    }
+            </tbody>
+        </table>
+
+        <p>@docname</p>
+    }
+}
+
+@code {
+
+    private Document[] documents;
+    public string docname;
+
+    protected override async Task OnInitializedAsync()
+    {
+        HttpResponseMessage response;
+
+        if (tokenContainer.Property != "null")
+        {
+            response = await Http.PostAsJsonAsync<string>("Documents", tokenContainer.Property);
+            documents = await response.Content.ReadAsAsync<Document[]>();
+        }
+
+    }
+
+    public async Task Edit(string name)
+    {
+        docname = name;
+    }
+}

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using YouLookGoodInPrint.Shared;
 
@@ -64,11 +65,21 @@ namespace YouLookGoodInPrint.Server.Entities
             return Users.Where(user => user.Username == username).Select(user => user.Token).ToArray()[0];
         }
 
+        public string GetUsernameByToken(string token)
+        {
+            return Users.Where(user => user.Token == token).Select(user => user.Username).ToArray()[0];
+        }
+
         public void AddDocument(string name, string author)
         {
             Document document = new Document(name, author);
             Documents.Add(document);
             this.SaveChanges();
+        }
+
+        public IEnumerable<Document> GetDocumentsByAuthor(string name)
+        {
+            return Documents.Where(doc => doc.Author == name).ToArray();
         }
 
         public void AddSampleData()

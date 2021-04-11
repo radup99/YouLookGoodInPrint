@@ -6,7 +6,7 @@ namespace YouLookGoodInPrint.Shared
 {
     public static class HashGenerator
     {
-        public static string GetHash(string password)
+        public static string GetHash(this string password)
         {
             StringBuilder Sb = new StringBuilder();
 

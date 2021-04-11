@@ -11,16 +11,28 @@ namespace YouLookGoodInPrint.Server.Controllers
         private readonly Database database = new Database();
 
         [HttpPost]
-        public string Post([FromBody] Credentials credentials)
+        public SignInResponse Post([FromBody] Credentials credentials)
         {
+            SignInResponse response = new SignInResponse();
+
             if (!database.UserExists(credentials.Username))
-                return "Username does not exist.";
+            {
+                response.Type = "error";
+                response.Message = "Username does not exist.";
+                return response;
+            }
+                
 
             if (!database.PasswordIsCorrect(credentials.Username, credentials.Password))
-                return "Incorrect password.";
+            {
+                response.Type = "error";
+                response.Message = "Incorrect password.";
+                return response;
+            }
 
-            return database.GetUserToken(credentials.Username);
-            
+            response.Type = "token";
+            response.Message = database.GetUserToken(credentials.Username);
+            return response;
         }
 
     }
