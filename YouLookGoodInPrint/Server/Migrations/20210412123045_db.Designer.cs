@@ -9,7 +9,7 @@ using YouLookGoodInPrint.Server.Entities;
 namespace YouLookGoodInPrint.Server.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20210330211055_db")]
+    [Migration("20210412123045_db")]
     partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,9 @@ namespace YouLookGoodInPrint.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Author")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Content")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreationDate")

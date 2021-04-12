@@ -15,6 +15,7 @@ namespace YouLookGoodInPrint.Client
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddSingleton<TokenContainer>();
+            builder.Services.AddSingleton<DocumentsContainer>();
 
             await builder.Build().RunAsync();
         }

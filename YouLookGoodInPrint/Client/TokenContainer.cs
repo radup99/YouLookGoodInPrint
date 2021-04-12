@@ -7,8 +7,36 @@ namespace YouLookGoodInPrint.Client
 {
     public class TokenContainer
     {
-        private string tokenString = "null";
+        private string _token = "null";
+        private string _username = "";
 
+        public string Token
+        {
+            get => _token;
+            set
+            {
+                _token = value;
+                NotifyStateChanged();
+            }
+        }
+
+        public string UserName
+        {
+            get => _username;
+            set
+            {
+                _username = value;
+                NotifyStateChanged();
+            }
+        }
+
+        public void Clear()
+        {
+            _token = "null";
+            _username = "";
+        }
+
+        /*
         public string Property
         {
             get => tokenString;
@@ -17,7 +45,7 @@ namespace YouLookGoodInPrint.Client
                 tokenString = value;
                 NotifyStateChanged();
             }
-        }
+        }*/
 
         public event Action OnChange;
 

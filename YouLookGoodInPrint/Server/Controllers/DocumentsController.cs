@@ -12,10 +12,11 @@ namespace YouLookGoodInPrint.Server.Controllers
         private readonly Database database = new Database();
 
         [HttpPost]
-        public IEnumerable<Document> Post([FromBody] string token)
+        public List<Document> Post([FromBody] string token)
         {
             string username = database.GetUsernameByToken(token);
             return database.GetDocumentsByAuthor(username);
         }
+
     }
 }

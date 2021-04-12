@@ -17,7 +17,9 @@ namespace YouLookGoodInPrint.Server.Entities
             if (!_created)
             {
                 _created = true;
+                Database.EnsureDeleted();
                 Database.EnsureCreated();
+                AddSampleData();
             }
         }
 
@@ -70,24 +72,24 @@ namespace YouLookGoodInPrint.Server.Entities
             return Users.Where(user => user.Token == token).Select(user => user.Username).ToArray()[0];
         }
 
-        public void AddDocument(string name, string author)
+        public void AddDocument(string name, string author, string content)
         {
-            Document document = new Document(name, author);
+            Document document = new Document(name, author, content);
             Documents.Add(document);
             this.SaveChanges();
         }
 
-        public IEnumerable<Document> GetDocumentsByAuthor(string name)
+        public List<Document> GetDocumentsByAuthor(string name)
         {
-            return Documents.Where(doc => doc.Author == name).ToArray();
+            return Documents.Where(doc => doc.Author == name).OrderBy(doc => doc.Name).ToList();
         }
 
         public void AddSampleData()
         {
-            this.AddUser("stefan7", HashGenerator.GetHash("abcd"), "Stefan Popescu", "stefan7@gmail.com");
-            this.AddUser("matei99", HashGenerator.GetHash("!qta76"), "Matei Dorin Enache", "mateidorin@gmail.com");
-            this.AddDocument("New Document", "stefan7");
-            this.AddDocument("Essay", "matei99");
+            this.AddUser("stefan7", "abcd".GetHash(), "Stefan Popescu", "stefan7@gmail.com");
+            this.AddUser("matei99", "!qta76".GetHash(), "Matei Dorin Enache", "mateidorin@gmail.com");
+            this.AddDocument("New Document", "stefan7", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+            this.AddDocument("Essay", "stefan7", "The quick brown fox jumps over the lazy dog");
         }
     }
 }

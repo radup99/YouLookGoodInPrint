@@ -1,0 +1,103 @@
+﻿@page "/editor"
+@using System.Net.Http.Json
+@using YouLookGoodInPrint.Shared
+@inject HttpClient Http
+@inject TokenContainer tokenContainer
+@inject DocumentsContainer docContainer
+@inject IJSRuntime JSRuntime
+
+@{
+    @if (tokenContainer.Token == "null")
+    {
+        <p>You are not signed in.</p>
+    }
+
+    else
+    {
+        <html>
+        <head>
+            <style>
+        .editor{
+            display: grid;
+        }
+
+                .text-area {
+                    border: solid 1px #ccc;
+                    padding: 20px;
+                    height: @editorHeight;
+                    width: @editorWidth;
+                    resize: none;
+                }
+
+        .toolbar
+        {
+            border: solid 1px #ddd;
+            background: #f4f4f4;
+            padding: 5px;
+            border-radius: 3px;
+            display: flex;
+            width: @editorWidth;
+        }
+
+        .toolbar > span {
+            cursor: pointer;
+        }
+
+            .toolbar > span:hover {
+                text-decoration: underline;
+            }
+
+        .titlebar {
+            border: solid 1px #ccc;
+            background: #ffffff;
+            padding: 20px;
+            width: @editorWidth;
+            height: 20px;
+            justify-content: center;
+        }
+
+
+            </style>
+        </head>
+
+        <body>
+            <div class="editor">
+                <div class="toolbar">
+                    <div class="titlebar" contenteditable="true">@titlebarContent</div>
+                    <button class="btn btn-primary" @onclick="() => Save()" type="submit">Save</button>
+                </div>
+
+                <form>
+                    <textarea class="text-area" @bind="textAreaContent"></textarea>
+                </form>
+            </div>
+        </body>
+
+        </html>
+    }
+
+}
+
+@code
+{
+    public string editorHeight = "800px";
+    public string editorWidth = "600px";
+
+    public string titlebarContent = "Title";
+    public string textAreaContent = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        titlebarContent = docContainer.currentDocument.Name;
+        textAreaContent = docContainer.currentDocument.Content;
+    }
+
+    public void Save()
+    {
+        foreach (Document doc in docContainer.documents)
+            if (doc.Id == docContainer.currentDocument.Id)
+                doc.Content = textAreaContent;
+    }
+
+
+}

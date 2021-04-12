@@ -49,6 +49,9 @@ namespace YouLookGoodInPrint.Server.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Content")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("TEXT");
 

@@ -3,10 +3,11 @@
 @using YouLookGoodInPrint.Shared
 @inject HttpClient Http
 @inject TokenContainer tokenContainer
+@inject DocumentsContainer docContainer
 
 <h3>Sign In</h3>
 @{
-    @if (tokenContainer.Property == "null")
+    @if (tokenContainer.Token == "null")
     {
         <form>
             <fieldset>
@@ -28,7 +29,7 @@
 
     else
     {
-        <p>You are signed in.</p>
+        <p>You are signed in as @tokenContainer.UserName.</p>
         <button class="btn btn-primary" @onclick="LogOut">Logout</button>
     }
 }
@@ -58,7 +59,9 @@
 
         if (response.Type == "token")
         {
-            tokenContainer.Property = response.Message;
+            tokenContainer.Token = response.Message;
+            tokenContainer.UserName = username;
+            await getDocuments();
             status = "Signed in successfully!";
             return;
         }
@@ -67,7 +70,8 @@
     public async Task LogOut()
     {
         clearForm();
-        tokenContainer.Property = "null";
+        tokenContainer.Clear();
+        docContainer.Clear();
         return;
     }
 
@@ -76,5 +80,16 @@
         username = "";
         password = "";
         status = "";
+    }
+
+    public async Task getDocuments()
+    {
+        HttpResponseMessage response;
+
+        if (tokenContainer.Token != "null")
+        {
+            response = await Http.PostAsJsonAsync<string>("Documents", tokenContainer.Token);
+            docContainer.documents = await response.Content.ReadAsAsync<List<Document>>();
+        }
     }
 }
