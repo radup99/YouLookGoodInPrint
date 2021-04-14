@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouLookGoodInPrint.Server", "Server\YouLookGoodInPrint.Server.csproj", "{845902EE-E684-4D2A-B5FB-152DFB19C9D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouLookGoodInPrint.Server", "Server\YouLookGoodInPrint.Server.csproj", "{845902EE-E684-4D2A-B5FB-152DFB19C9D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouLookGoodInPrint.Client", "Client\YouLookGoodInPrint.Client.csproj", "{84CC045C-DD6E-4C2B-89AC-A04151F2A057}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouLookGoodInPrint.Client", "Client\YouLookGoodInPrint.Client.csproj", "{84CC045C-DD6E-4C2B-89AC-A04151F2A057}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouLookGoodInPrint.Shared", "Shared\YouLookGoodInPrint.Shared.csproj", "{95944F18-68BF-4C36-B1B7-2921BC07ED6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouLookGoodInPrint.Shared", "Shared\YouLookGoodInPrint.Shared.csproj", "{95944F18-68BF-4C36-B1B7-2921BC07ED6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

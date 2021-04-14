@@ -7,31 +7,62 @@
 
 <h3>Sign In</h3>
 @{
-    @if (tokenContainer.Token == "null")
-    {
-        <form>
-            <fieldset>
-                <div>
-                    <label for="username">User</label>
-                    <input type="text" @bind="username" />
+    <html>
+        <head>
+            <style>
+                .field {
+                    width: 100%;
+                    padding: 12px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px; 
+                    box-sizing: border-box;
+                    margin-top: 6px;
+                    margin-bottom: 16px;
+                    resize: vertical;
+                }
+                /* Add a background color and some padding around the form */
+                .form{
+                    border-radius: 5px;
+                    background-color: #f2f2f2;
+                    padding: 20px;
+                    width: 30%;
+                    margin-top: 3%;
+                    margin-bottom: 2%;
+                }
+            </style>
+        </head>
+
+        <body>
+            @if (tokenContainer.Token == "null")
+            {
+                <div class="form">
+                    <form>
+                        <fieldset>
+                            <div>
+                                <label for="username">User</label>
+                                <input class="field" type="text" @bind="username" />
+                            </div>
+
+                            <div>
+                                <label for="password_text">Password</label>
+                                <input class="field" type="password" @bind="password" />
+                            </div>
+                        </fieldset>
+                    </form>
+
+                    <button class="btn btn-primary" @onclick="Submit">Submit</button>
                 </div>
+                <p>@status</p>
+         
+            }
 
-                <div>
-                    <label for="password_text">Password</label>
-                    <input type="password" @bind="password" />
-                </div>
-            </fieldset>
-        </form>
-
-        <button class="btn btn-primary" @onclick="Submit">Submit</button>
-        <p>@status</p>
-    }
-
-    else
-    {
-        <p>You are signed in as @tokenContainer.UserName.</p>
-        <button class="btn btn-primary" @onclick="LogOut">Logout</button>
-    }
+            else
+            {
+                <p>You are signed in as @tokenContainer.UserName.</p>
+                <button class="btn btn-primary" @onclick="LogOut">Logout</button>
+            }
+        </body>
+    </html>
 }
 
 @code {
@@ -49,17 +80,17 @@
         Credentials credentials = new Credentials(username, hash);
 
         HttpResponseMessage postResponse = await Http.PostAsJsonAsync<Credentials>("SignIn", credentials);
-        var response = await postResponse.Content.ReadAsAsync<SignInResponse>();
+        var message = await postResponse.Content.ReadAsAsync<ServerMessage>();
 
-        if (response.Type == "error")
+        if (message.Type == "error")
         {
-            status = response.Message;
+            status = message.Message;
             return;
         }
 
-        if (response.Type == "token")
+        if (message.Type == "token")
         {
-            tokenContainer.Token = response.Message;
+            tokenContainer.Token = message.Message;
             tokenContainer.UserName = username;
             await getDocuments();
             status = "Signed in successfully!";
@@ -88,8 +119,8 @@
 
         if (tokenContainer.Token != "null")
         {
-            response = await Http.PostAsJsonAsync<string>("Documents", tokenContainer.Token);
-            docContainer.documents = await response.Content.ReadAsAsync<List<Document>>();
+            response = await Http.PostAsJsonAsync<string>("DocumentList", tokenContainer.Token);
+            docContainer.Documents = await response.Content.ReadAsAsync<List<Document>>();
         }
     }
 }

@@ -8,15 +8,15 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("Register")]
     public class RegisterController : ControllerBase
     {
-        private readonly Database database = new Database();
+        private readonly UserDataAccess Users = new UserDataAccess();
 
         [HttpPost]
         public string Post([FromBody] RegistrationData rdata)
         {
-            if (database.UserExists(rdata.Username))
+            if (Users.UserExists(rdata.Username))
                 return "Username already exists.";
 
-            database.AddUser(rdata.Username, rdata.Password, rdata.RealName, rdata.Email);
+            Users.AddUser(rdata.Username, rdata.Password, rdata.RealName, rdata.Email);
             return "Registration complete!";
         }
     }

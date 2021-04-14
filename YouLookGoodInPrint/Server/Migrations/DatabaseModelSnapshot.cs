@@ -62,6 +62,31 @@ namespace YouLookGoodInPrint.Server.Migrations
 
                     b.ToTable("Documents");
                 });
+
+            modelBuilder.Entity("YouLookGoodInPrint.Shared.Print", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Author")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Orientation")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("PrintDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Prints");
+                });
 #pragma warning restore 612, 618
         }
     }

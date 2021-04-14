@@ -19,9 +19,9 @@
         <input type="checkbox" @bind="orientation_l" name="orientation" value="Landscape">
         <label for="orientation"> Landscape</label><br>
         <h4>Color:</h4>
-        <input type="checkbox"  @bind="color_c" name="color" value="Color">
+        <input type="checkbox" @bind="color_c" name="color" value="Color">
         <label for="color"> Color</label><br>
-        <input type="checkbox"  @bind="color_bw" name="color" value="Black-and-White">
+        <input type="checkbox" @bind="color_bw" name="color" value="Black-and-White">
         <label for="color"> Black-and-White</label><br>
 
         <h4>Number of copies:</h4>
@@ -32,7 +32,7 @@
 <button class="btn btn-primary" @onclick="Submit">Submit</button>
 
 @code {
-    public string Id= "";
+    public string Id = "";
     public string title = "Title";
     public string orientation = "Portrait";
     public string color = "Color";
@@ -46,18 +46,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Id = docContainer.currentDocument.Id;
-        title = docContainer.currentDocument.Name;
+        Id = docContainer.CurrentDocument.Id;
+        title = docContainer.CurrentDocument.Name;
 
     }
 
 
     public async Task Submit()
-    {   if(orientation_l==true&&orientation_p==false)
+    {
+        if (orientation_l == true && orientation_p == false)
         {
             orientation = "Landscape";
         }
-        if (orientation_l == false&& orientation_p == true)
+        if (orientation_l == false && orientation_p == true)
         {
             orientation = "Portrait";
         }
@@ -70,10 +71,8 @@
             color = "Black-and-White";
         }
 
-
-
-        Print pdata = new Print(Id,title,orientation,color,number);
-        await Http.PostAsJsonAsync<Print>("print", pdata);
+        Print pdata = new Print(Id, title, orientation, color, number);
+        await Http.PostAsJsonAsync<Print>("Print", pdata);
         UriHelper.NavigateTo("documents");
     }
 }

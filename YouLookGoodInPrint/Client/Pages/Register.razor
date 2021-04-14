@@ -6,30 +6,63 @@
 
 <h3>Register</h3>
 
-<form>
-    <fieldset>
-        <div>
-            <label for="username">User</label>
-            <input type="text" @bind="username" />
-        </div>
+<html>
+    <head>
+        <style>
+            .field {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                margin-top: 6px;
+                margin-bottom: 16px;
+                resize: vertical;
+            }
+            /* Add a background color and some padding around the form */
+            .form {
+                border-radius: 5px;
+                background-color: #f2f2f2;
+                padding: 20px;
+                width: 30%;
+                margin-top: 3%;
+                margin-bottom: 2%;
+            }
+        </style>
+    </head>
 
-        <div>
-            <label for="password_text">Password</label>
-            <input type="password" @bind="password" />
-        </div>
-        <div>
-            <label for="password_text">Real Name</label>
-            <input type="text" @bind="realname" />
-        </div>
-        <div>
-            <label for="password_text">E-Mail</label>
-            <input type="text" @bind="email" />
-        </div>
-    </fieldset>
-</form>
+    <body>
+        <div class="form">
+            <form>
+                <fieldset>
+                    <div>
+                        <label for="username">User</label>
+                        <input class="field" type="text" @bind="username" />
+                    </div>
 
-<button class="btn btn-primary" @onclick="Submit">Submit</button>
-<p>@status</p>
+                    <div>
+                        <label for="password_text">Password</label>
+                        <input class="field" type="password" @bind="password" />
+                    </div>
+
+                    <div>
+                        <label for="password_text">Real Name</label>
+                        <input class="field" type="text" @bind="realname" />
+                    </div>
+
+                    <div>
+                        <label for="password_text">E-Mail</label>
+                        <input class="field" type="text" @bind="email" />
+                    </div>
+                </fieldset>
+            </form>
+
+            <button class="btn btn-primary" @onclick="Submit">Submit</button>
+        </div>
+        
+        <p>@status</p>
+    </body>
+</html>
 
 @code {
 
@@ -50,7 +83,7 @@
             return;
         }
 
-        string hash = HashGenerator.GetHash(password);
+        string hash = password.GetHash();
         RegistrationData rdata = new RegistrationData(username, hash, realname, email);
 
         HttpResponseMessage resp = await Http.PostAsJsonAsync<RegistrationData>("Register", rdata);

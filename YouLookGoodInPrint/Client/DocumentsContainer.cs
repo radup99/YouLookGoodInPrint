@@ -1,23 +1,69 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using YouLookGoodInPrint.Shared;
 
 namespace YouLookGoodInPrint.Client
 {
     public class DocumentsContainer
     {
-        public List<Document> documents;
+        public List<Document> Documents;
 
-        public Document currentDocument = new Document("", "", "");
+        public Document CurrentDocument = new Document("", "", "");
+        public bool NoDocumentSelected = true;
 
         public void Clear()
         {
-            documents = null;
+            Documents = null;
+            NotifyStateChanged();
         }
 
-        public void selectDocument(Document document)
+        public Document GetById(string id)
         {
-            this.currentDocument = document;
+            foreach (Document doc in Documents)
+                if (doc.Id == id)
+                {
+                    return doc;
+                }
+
+            return new Document("", "", "");
         }
+
+        public void SelectDocument(Document document)
+        {
+            this.CurrentDocument = document;
+            NotifyStateChanged();
+        }
+
+        public void DeleteDocument(string id)
+        {
+            foreach(Document doc in Documents)
+                if (doc.Id == id)
+                {
+                    Documents.Remove(doc);
+                    NotifyStateChanged();
+                }
+        }
+
+        public void DeleteDocument(Document document)
+        {
+            Documents.Remove(document);
+            NotifyStateChanged();
+        }
+
+        public void AddDocument(Document document)
+        {
+            Documents.Add(document);
+            SortByName();
+            NotifyStateChanged();
+        }
+
+        public void SortByName()
+        {
+            Documents.Sort((x, y) => string.Compare(x.Name, y.Name));
+        }
+
+        public event Action OnChange;
+        private void NotifyStateChanged() => OnChange?.Invoke();
     }
 
 }

@@ -10,69 +10,127 @@
 <h3>Documents</h3>
 
 @{
-                @if (tokenContainer.Token == "null")
-                {
-    <p>You are not signed in.</p> }
+    @if (tokenContainer.Token == "null")
+    {
+        <p>You are not signed in.</p>
+    }
 
-                else if (docContainer.documents == null)
-                {
-    <p><em>Loading...</em></p> }
+    else if (docContainer.Documents == null)
+    {
+        <p><em>Loading...</em></p>
+    }
 
-                else
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Creation Date</th>
+                    <th>Options</th>
+                    <th>Print Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var doc in docContainer.Documents)
                 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Creation Date</th>
-                <th>Options</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var doc in docContainer.documents)
+                    <tr>
+                        <td>@doc.Name</td>
+                        <td>@doc.CreationDate.ToShortDateString()</td>
+                        <td>
+                            <button class="btn btn-primary" @onclick="() => Edit(doc.Id)">Edit</button>
+                            <button class="btn btn-primary" @onclick="() => Delete(doc.Id)">Delete</button>
+                            <button class="btn btn-primary" @onclick="() => Print(doc.Name)">Print</button>
+                        </td>
+                            @if (pContainer.prints != null)
+                                foreach (var p in pContainer.prints)
+                                {
+                                    if (doc.Id == p.Id)
+                                    {
+                                        <td>Printed on @p.PrintDate.ToShortDateString()</td>
+                                    }
+                            }
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button class="btn btn-primary" @onclick="NewDocument">New Document</button>
+        <p>@status</p>
+        }
+    }
+
+@code {
+
+    public string docname;
+    public string status = "";
+
+    public async Task Edit(string id)
+    {
+        foreach (Document doc in docContainer.Documents)
+        {
+            if (doc.Id == id)
             {
-<tr>
-    <td>@doc.Name</td>
-    <td>@doc.CreationDate.ToShortDateString()</td>
-    <td>
-        <button class="btn btn-primary" @onclick="() => Edit(doc.Name)">Edit</button>
-        <button class="btn btn-primary" @onclick="() => Edit(doc.Name)">View</button>
-        <button class="btn btn-primary" @onclick="() => Print(doc.Name)">Print</button>
-
-        @if (pContainer.prints != null)
-            foreach (var p in pContainer.prints)
-            {   if (p.Id == doc.Id)
-                { <p>Printed on @doc.CreationDate</p>}
+                docContainer.SelectDocument(doc);
+                docContainer.NoDocumentSelected = false;
+            }
         }
 
-    </td>
-</tr>                }
-        </tbody>
-    </table>
+        UriHelper.NavigateTo("editor");
+    }
 
-                    <p>@docname</p>} }
+    public async Task Print(string name)
+    {
+        foreach (Document doc in docContainer.Documents)
+        {
+            if (doc.Name == name)
+                docContainer.CurrentDocument = doc;
+        }
 
-@code { public string docname;
+        UriHelper.NavigateTo("print");
+    }
 
-            public async Task Edit(string name)
-            {
-                foreach (Document doc in docContainer.documents)
-                {
-                    if (doc.Name == name)
-                        docContainer.currentDocument = doc;
-                }
+    public async Task Delete(string id)
+    {
+        HttpResponseMessage response;
+        ServerMessage message;
 
-                UriHelper.NavigateTo("editor");
-            }
+        Document document = docContainer.GetById(id);
+        DocumentData docData = new DocumentData(document, tokenContainer.UserName, tokenContainer.Token, "delete");
 
-            public async Task Print(string name)
-            {
-                foreach (Document doc in docContainer.documents)
-                {
-                    if (doc.Name == name)
-                        docContainer.currentDocument = doc;
-                }
+        response = await Http.PostAsJsonAsync<DocumentData>("Documents", docData);
+        message = await response.Content.ReadAsAsync<ServerMessage>();
 
-                UriHelper.NavigateTo("print");
-            } }
+        if (message.Type == "error")
+        {
+            status = "Couldn't delete document!";
+            return;
+        }
 
+        docContainer.DeleteDocument(id);
+        status = "Document deleted.";
+
+    }
+
+    public async Task NewDocument()
+    {
+        HttpResponseMessage response;
+        ServerMessage message;
+
+        Document newDocument = new Document("New Document", tokenContainer.UserName, "");
+        DocumentData docData = new DocumentData(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
+
+
+        response = await Http.PostAsJsonAsync<DocumentData>("Documents", docData);
+        message = await response.Content.ReadAsAsync<ServerMessage>();
+
+        if (message.Type == "error")
+        {
+            status = "Couldn't create document!";
+            return;
+        }
+
+        docContainer.AddDocument(newDocument);
+    }
+}

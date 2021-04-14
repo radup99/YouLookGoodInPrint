@@ -7,7 +7,7 @@ namespace YouLookGoodInPrint.Client
     {
         public List<Print> prints;
 
-        public Print currentPrint = new Print("", "", "","",0);
+        public Print currentPrint = new Print("", "", "", "", 0);
         public void Clear()
         {
             prints = null;

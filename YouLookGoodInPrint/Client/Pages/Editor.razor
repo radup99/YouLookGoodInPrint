@@ -4,7 +4,7 @@
 @inject HttpClient Http
 @inject TokenContainer tokenContainer
 @inject DocumentsContainer docContainer
-@inject IJSRuntime JSRuntime
+@inject NavigationManager UriHelper
 
 @{
     @if (tokenContainer.Token == "null")
@@ -17,16 +17,17 @@
         <html>
         <head>
             <style>
+
         .editor{
             display: grid;
         }
 
-                .text-area {
-                    border: solid 1px #ccc;
-                    padding: 20px;
-                    height: @editorHeight;
-                    width: @editorWidth;
-                    resize: none;
+        .text-area {
+            border: solid 1px #ccc;
+            padding: 20px;
+            height: @editorHeight;
+            width: @editorWidth;
+            resize: none;
                 }
 
         .toolbar
@@ -63,18 +64,22 @@
         <body>
             <div class="editor">
                 <div class="toolbar">
-                    <div class="titlebar" contenteditable="true">@titlebarContent</div>
-                    <button class="btn btn-primary" @onclick="() => Save()" type="submit">Save</button>
+                    <input class="titlebar" type="text" @bind="titlebarContent">
+                    <button class="btn btn-primary" @onclick="Save" type="submit">Save</button>
+                    <button class="btn btn-primary" @onclick="Close" type="submit">Close</button>
                 </div>
 
                 <form>
                     <textarea class="text-area" @bind="textAreaContent"></textarea>
                 </form>
             </div>
+
+            <p>@saveStatus</p>
         </body>
 
-        </html>
-    }
+    </html>
+}
+
 
 }
 
@@ -83,21 +88,86 @@
     public string editorHeight = "800px";
     public string editorWidth = "600px";
 
-    public string titlebarContent = "Title";
+    public string titlebarContent = "";
     public string textAreaContent = "";
+    public string saveStatus = "";
 
     protected override async Task OnInitializedAsync()
     {
-        titlebarContent = docContainer.currentDocument.Name;
-        textAreaContent = docContainer.currentDocument.Content;
+        if (!docContainer.NoDocumentSelected)
+        {
+            titlebarContent = docContainer.CurrentDocument.Name;
+            textAreaContent = docContainer.CurrentDocument.Content;
+        }
     }
 
-    public void Save()
+    public async Task Save()
     {
-        foreach (Document doc in docContainer.documents)
-            if (doc.Id == docContainer.currentDocument.Id)
-                doc.Content = textAreaContent;
+        if (titlebarContent == "")
+        {
+            saveStatus = "Please add a title.";
+            return;
+        }
+
+        if (!docContainer.NoDocumentSelected)
+            await SaveModifiedDocument();
+
+        else
+            await SaveNewDocument();
     }
 
+    public async Task SaveModifiedDocument()
+    {
+        docContainer.CurrentDocument.Name = titlebarContent;
+        docContainer.CurrentDocument.Content = textAreaContent;
+        docContainer.SortByName();
 
+        HttpResponseMessage response;
+        ServerMessage message;
+        DocumentData docData = new DocumentData(docContainer.CurrentDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
+        response = await Http.PostAsJsonAsync<DocumentData>("Documents", docData);
+        message = await response.Content.ReadAsAsync<ServerMessage>();
+
+        if (message.Type == "error")
+        {
+            saveStatus = "Couldn't save document!";
+            return;
+        }
+
+        else
+        {
+            saveStatus = message.Message;
+            return;
+        }
+
+    }
+
+    public async Task SaveNewDocument()
+    {
+        Document newDocument = new Document(titlebarContent, tokenContainer.UserName, textAreaContent);
+
+        HttpResponseMessage response;
+        ServerMessage message;
+        DocumentData docData = new DocumentData(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
+        response = await Http.PostAsJsonAsync<DocumentData>("Documents", docData);
+        message = await response.Content.ReadAsAsync<ServerMessage>();
+
+        if (message.Type == "error")
+        {
+            saveStatus = "Couldn't create document!";
+            return;
+        }
+
+        else
+        {
+            saveStatus = message.Message;
+            return;
+        }
+    }
+
+    public async Task Close()
+    {
+        docContainer.NoDocumentSelected = true;
+        UriHelper.NavigateTo("documents");
+    }
 }

@@ -8,14 +8,14 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("SignIn")]
     public class SignInController : ControllerBase
     {
-        private readonly Database database = new Database();
+        private readonly UserDataAccess Users = new UserDataAccess();
 
         [HttpPost]
-        public SignInResponse Post([FromBody] Credentials credentials)
+        public ServerMessage Post([FromBody] Credentials credentials)
         {
-            SignInResponse response = new SignInResponse();
+            ServerMessage response = new ServerMessage();
 
-            if (!database.UserExists(credentials.Username))
+            if (!Users.UserExists(credentials.Username))
             {
                 response.Type = "error";
                 response.Message = "Username does not exist.";
@@ -23,7 +23,7 @@ namespace YouLookGoodInPrint.Server.Controllers
             }
                 
 
-            if (!database.PasswordIsCorrect(credentials.Username, credentials.Password))
+            if (!Users.PasswordIsCorrect(credentials.Username, credentials.Password))
             {
                 response.Type = "error";
                 response.Message = "Incorrect password.";
@@ -31,7 +31,7 @@ namespace YouLookGoodInPrint.Server.Controllers
             }
 
             response.Type = "token";
-            response.Message = database.GetUserToken(credentials.Username);
+            response.Message = Users.GetUserToken(credentials.Username);
             return response;
         }
 
