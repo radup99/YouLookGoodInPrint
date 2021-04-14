@@ -36,17 +36,6 @@ namespace YouLookGoodInPrint.Client
             _username = "";
         }
 
-        /*
-        public string Property
-        {
-            get => tokenString;
-            set
-            {
-                tokenString = value;
-                NotifyStateChanged();
-            }
-        }*/
-
         public event Action OnChange;
 
         private void NotifyStateChanged() => OnChange?.Invoke();

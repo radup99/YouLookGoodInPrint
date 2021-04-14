@@ -1,21 +1,47 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using YouLookGoodInPrint.Shared;
 
 namespace YouLookGoodInPrint.Client
 {
     public class PrintContainer
     {
-        public List<Print> prints;
+        private List<Print> _prints;
 
-        public Print currentPrint = new Print("", "", "", "", 0);
+        private Print _currentPrint = new Print("", "", "", "", 0);
+
+        public List<Print> Prints
+        {
+            get => _prints;
+            set
+            {
+                _prints = value;
+                NotifyStateChanged();
+            }
+        }
+
+        public Print CurrentPrint
+        {
+            get => _currentPrint;
+            set
+            {
+                _currentPrint = value;
+                NotifyStateChanged();
+            }
+        }
+
         public void Clear()
         {
-            prints = null;
+            _prints = null;
         }
 
         public void selectPrint(Print print)
         {
-            this.currentPrint = print;
+            this._currentPrint = print;
         }
+
+        public event Action OnChange;
+
+        private void NotifyStateChanged() => OnChange?.Invoke();
     }
 }

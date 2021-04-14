@@ -42,8 +42,8 @@
                             <button class="btn btn-primary" @onclick="() => Delete(doc.Id)">Delete</button>
                             <button class="btn btn-primary" @onclick="() => Print(doc.Name)">Print</button>
                         </td>
-                            @if (pContainer.prints != null)
-                                foreach (var p in pContainer.prints)
+                            @if (pContainer.Prints != null)
+                                foreach (var p in pContainer.Prints)
                                 {
                                     if (doc.Id == p.Id)
                                     {

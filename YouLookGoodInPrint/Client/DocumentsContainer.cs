@@ -8,8 +8,28 @@ namespace YouLookGoodInPrint.Client
     {
         public List<Document> Documents;
 
-        public Document CurrentDocument = new Document("", "", "");
-        public bool NoDocumentSelected = true;
+        private Document _currentDocument = new Document("", "", "");
+        private bool _noDocumentSelected = true;
+
+        public Document CurrentDocument
+        {
+            get => _currentDocument;
+            set
+            {
+                _currentDocument = value;
+                NotifyStateChanged();
+            }
+        }
+
+        public bool NoDocumentSelected
+        {
+            get => _noDocumentSelected;
+            set
+            {
+                _noDocumentSelected = value;
+                NotifyStateChanged();
+            }
+        }
 
         public void Clear()
         {
