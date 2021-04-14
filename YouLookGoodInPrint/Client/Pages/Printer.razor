@@ -1,0 +1,79 @@
+﻿@page "/print"
+@using System.Net.Http.Json
+@using YouLookGoodInPrint.Shared
+@inject HttpClient Http
+@inject TokenContainer tokenContainer
+@inject DocumentsContainer docContainer
+@inject NavigationManager UriHelper
+
+<h3>@title</h3>
+<br>
+
+<h3>Printing options:</h3>
+
+<form>
+    <fieldset>
+        <h4>Orientation:</h4>
+        <input type="checkbox" @bind="orientation_p" name="orientation" value="Portrait">
+        <label for="orientation"> Portrait</label><br>
+        <input type="checkbox" @bind="orientation_l" name="orientation" value="Landscape">
+        <label for="orientation"> Landscape</label><br>
+        <h4>Color:</h4>
+        <input type="checkbox"  @bind="color_c" name="color" value="Color">
+        <label for="color"> Color</label><br>
+        <input type="checkbox"  @bind="color_bw" name="color" value="Black-and-White">
+        <label for="color"> Black-and-White</label><br>
+
+        <h4>Number of copies:</h4>
+        <input type="number" min="1" @bind="number" />
+    </fieldset>
+</form>
+<br>
+<button class="btn btn-primary" @onclick="Submit">Submit</button>
+
+@code {
+    public string Id= "";
+    public string title = "Title";
+    public string orientation = "Portrait";
+    public string color = "Color";
+    public bool orientation_p = false;
+    public bool orientation_l = false;
+    public bool color_c = false;
+    public bool color_bw = false;
+    public int number = 1;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Id = docContainer.currentDocument.Id;
+        title = docContainer.currentDocument.Name;
+
+    }
+
+
+    public async Task Submit()
+    {   if(orientation_l==true&&orientation_p==false)
+        {
+            orientation = "Landscape";
+        }
+        if (orientation_l == false&& orientation_p == true)
+        {
+            orientation = "Portrait";
+        }
+        if (color_c == true && color_bw == false)
+        {
+            color = "Color";
+        }
+        if (color_c == false && color_bw == true)
+        {
+            color = "Black-and-White";
+        }
+
+
+
+        Print pdata = new Print(Id,title,orientation,color,number);
+        await Http.PostAsJsonAsync<Print>("print", pdata);
+        UriHelper.NavigateTo("documents");
+    }
+}
