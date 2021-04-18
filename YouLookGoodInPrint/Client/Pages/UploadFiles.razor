@@ -1,0 +1,171 @@
+﻿@page "/upload"
+@using System.Linq
+@using System.Net.Http.Json
+@using Microsoft.Extensions.Logging
+@using YouLookGoodInPrint.Shared;
+@inject HttpClient Http
+@inject TokenContainer tokenContainer
+@inject ILogger<UploadFiles> logger
+@inject NavigationManager UriHelper
+@inject DocumentsContainer docContainer
+<h1>Upload Files</h1>
+
+<p>
+    <label>
+        Upload up to @maxAllowedFiles files:
+        <InputFile OnChange="@OnInputFileChange" multiple />
+    </label>
+</p>
+
+@if (files.Count > 0)
+{count = 0;
+    <div class="card">
+        <div class="card-body">
+            <ul>
+                @foreach (var file in files)
+                { 
+                    <li>
+                        File: @file.Name
+                        <br>
+                        @if (FileUpload(uploadResults, file.Name, logger,
+                     out var result))
+                        {
+                            <span>
+                                Stored File Name: @result.StoredFileName
+                            </span>
+                            if(count>=numberDoc)
+                            {
+                            @AddDocument(file.Name, result.StoredFileName);
+                            numberDoc = numberDoc + 1;
+                             }
+                            count = count + 1;
+                        }
+                        else
+                        {
+                            <span>
+                                There was an error uploading the file
+                                (Error: @result.ErrorCode).
+                            </span>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@code {
+    private IList<File> files = new List<File>();
+    private int numberDoc = 0;
+    private IList<UploadResult> uploadResults = new List<UploadResult>();
+    private int maxAllowedFiles = 3;
+    private bool shouldRender;
+    private int count;
+    public string status = "";
+    protected override bool ShouldRender() => shouldRender;
+
+
+    private async Task AddDocument(string fileName,string storedName)
+    {
+        HttpResponseMessage response;
+        ServerMessage message;
+        Document newDocument = new Document(fileName, tokenContainer.UserName, storedName);
+        DocumentData docData = new DocumentData(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
+
+        response = await Http.PostAsJsonAsync<DocumentData>("Documents", docData);
+        message = await response.Content.ReadAsAsync<ServerMessage>();
+
+        if (message.Type == "error")
+        {
+            status = "Couldn't create document!";
+            return;
+        }
+
+        docContainer.AddDocument(newDocument);
+    }
+
+
+
+
+
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        shouldRender = false;
+        long maxFileSize = 1024 * 1024 * 15;
+        var upload = false;
+
+        using var content = new MultipartFormDataContent();
+
+        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+        {
+            if (uploadResults.SingleOrDefault(
+                f => f.FileName == file.Name) is null)
+            {
+                var fileContent = new StreamContent(file.OpenReadStream());
+
+                files.Add(
+                    new File()
+                    {
+                        Name = file.Name,
+                    });
+
+                if (file.Size < maxFileSize)
+                {
+                    content.Add(
+                        content: fileContent,
+                        name: "\"files\"",
+                        fileName: file.Name);
+
+                    upload = true;
+
+                }
+                else
+                {
+                    logger.LogInformation("{FileName} not uploaded", file.Name);
+
+                    uploadResults.Add(
+                        new UploadResult()
+                        {
+                            FileName = file.Name,
+                            ErrorCode = 6,
+                            Uploaded = false,
+                        });
+                }
+            }
+        }
+
+        if (upload)
+        {
+            var response = await Http.PostAsync("/Filesave", content);
+
+            var newUploadResults = await response.Content
+                .ReadFromJsonAsync<IList<UploadResult>>();
+
+            uploadResults = uploadResults.Concat(newUploadResults).ToList();
+
+        }
+
+        shouldRender = true;
+    }
+
+    private static bool FileUpload(IList<UploadResult> uploadResults,
+        string fileName, ILogger<UploadFiles> logger, out UploadResult result)
+    {
+        result = uploadResults.SingleOrDefault(f => f.FileName == fileName);
+
+        if (result is null)
+        {
+            logger.LogInformation("{FileName} not uploaded", fileName);
+            result = new UploadResult();
+            result.ErrorCode = 5;
+        }
+
+        return result.Uploaded;
+    }
+
+    private class File
+    {
+        public string Name { get; set; }
+    }
+}

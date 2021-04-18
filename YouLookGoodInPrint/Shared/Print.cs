@@ -6,7 +6,8 @@ namespace YouLookGoodInPrint.Shared
     public class Print
     {
         [Key]
-        public string Id { get; set; }
+        public string IdPrint { get; set; }
+        public string IdDoc { get; set; }
 
 
         public string Author { get; set; }
@@ -19,9 +20,10 @@ namespace YouLookGoodInPrint.Shared
 
         public int Number { get; set; }
 
-        public Print(string Id, string author, string orientation, string color, int number)
+        public Print(string idDoc, string author, string orientation, string color, int number)
         {
-            this.Id = Id;
+            this.IdPrint=Guid.NewGuid().ToString();
+            this.IdDoc= idDoc;
             this.Author = author;
             this.PrintDate = DateTime.Now;
             this.Orientation = orientation;
