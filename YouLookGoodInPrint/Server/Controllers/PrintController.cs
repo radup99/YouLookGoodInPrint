@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YouLookGoodInPrint.Shared;
-using YouLookGoodInPrint.Server.Entities;
-using System.Collections.Generic;
+using YouLookGoodInPrint.Server.Data;
 
 namespace YouLookGoodInPrint.Server.Controllers
 {
@@ -15,7 +14,7 @@ namespace YouLookGoodInPrint.Server.Controllers
         public ServerMessage Post([FromBody] Print printData)
         {
             ServerMessage response = new ServerMessage();
-            Prints.AddPrint(printData);
+            Prints.Add(printData);
             return response;
         }
 

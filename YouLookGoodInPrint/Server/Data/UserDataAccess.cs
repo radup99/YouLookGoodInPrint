@@ -1,36 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using YouLookGoodInPrint.Server.Entities;
 
-namespace YouLookGoodInPrint.Server.Entities
+namespace YouLookGoodInPrint.Server.Data
 {
-    public class UserDataAccess
+    public class UserDataAccess : IDataAccess<User>
     {
         private readonly Database database = new Database();
 
-        public void AddUser(string username, string password)
+        public void Add(User user)
         {
-            User user = new User(username, password);
             database.Users.Add(user);
             database.SaveChanges();
         }
 
-        public void AddUser(string username, string password, string name, string email)
+        public void Remove(string id)
         {
-            User user = new User(username, password, name, email);
-            database.Users.Add(user);
-            database.SaveChanges();
+            User user = database.Users.FirstOrDefault(user => user.Id == id);
+            database.Users.Remove(user);
         }
 
-        public bool UserExists(string username)
+        public User Get(string id)
         {
-            if (database.Users.Any(user => user.Username == username))
-                return true;
-            return false;
+            return database.Users.FirstOrDefault(user => user.Id == id);
         }
 
-        public bool PasswordIsCorrect(string username, string password)
+        public bool Exists(string id)
+        {
+            return database.Users.Any(user => user.Id == id);
+        }
+
+        public bool UsernameExists(string username)
+        {
+            return database.Users.Any(user => user.Username == username);
+        }
+
+        public bool IsPasswordCorrect(string username, string password)
         {
             if (database.Users.Any(user => user.Username == username && user.Password == password))
                 return true;

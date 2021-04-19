@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YouLookGoodInPrint.Shared;
+using YouLookGoodInPrint.Server.Data;
 using YouLookGoodInPrint.Server.Entities;
 
 namespace YouLookGoodInPrint.Server.Controllers
@@ -13,10 +14,11 @@ namespace YouLookGoodInPrint.Server.Controllers
         [HttpPost]
         public string Post([FromBody] RegistrationData rdata)
         {
-            if (Users.UserExists(rdata.Username))
+            if (Users.UsernameExists(rdata.Username))
                 return "Username already exists.";
 
-            Users.AddUser(rdata.Username, rdata.Password, rdata.RealName, rdata.Email);
+            User user = new User(rdata.Username, rdata.Password, rdata.RealName, rdata.Email);
+            Users.Add(user);
             return "Registration complete!";
         }
     }

@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
+using YouLookGoodInPrint.Server.Entities;
 using YouLookGoodInPrint.Shared;
 
 
-namespace YouLookGoodInPrint.Server.Entities
+namespace YouLookGoodInPrint.Server.Data
 {
     public class Database : DbContext
     {

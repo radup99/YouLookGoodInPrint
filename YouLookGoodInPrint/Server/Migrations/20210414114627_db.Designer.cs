@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using YouLookGoodInPrint.Server.Entities;
+using YouLookGoodInPrint.Server.Data;
 
 namespace YouLookGoodInPrint.Server.Migrations
 {

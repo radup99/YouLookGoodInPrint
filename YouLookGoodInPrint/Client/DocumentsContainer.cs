@@ -6,10 +6,20 @@ namespace YouLookGoodInPrint.Client
 {
     public class DocumentsContainer
     {
-        public List<Document> Documents;
+        private List<Document> _documents;
 
         private Document _currentDocument = new Document("", "", "");
         private bool _noDocumentSelected = true;
+
+        public List<Document> Documents
+        {
+            get => _documents;
+            set
+            {
+                _documents = value;
+                NotifyStateChanged();
+            }
+        }
 
         public Document CurrentDocument
         {

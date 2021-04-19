@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YouLookGoodInPrint.Shared;
-using YouLookGoodInPrint.Server.Entities;
-using System.Collections.Generic;
+using YouLookGoodInPrint.Server.Data;
 
 
 namespace YouLookGoodInPrint.Server.Controllers
@@ -27,13 +26,13 @@ namespace YouLookGoodInPrint.Server.Controllers
 
             if (docData.Option == "delete")
             {
-                Documents.DeleteDocument(docData.Document.Id);
+                Documents.Remove(docData.Document.Id);
                 response.Type = "success";
                 response.Message = "Document deleted.";
             }
             
 
-            if (Documents.DocumentExists(docData.Document.Id))
+            if (Documents.Exists(docData.Document.Id))
             {
                 Documents.ModifyDocument(docData.Document.Id, docData.Document);
                 response.Type = "success";
@@ -42,7 +41,7 @@ namespace YouLookGoodInPrint.Server.Controllers
 
             else
             {
-                Documents.AddDocument(docData.Document);
+                Documents.Add(docData.Document);
                 response.Type = "success";
                 response.Message = "Document created successfully!";
             }

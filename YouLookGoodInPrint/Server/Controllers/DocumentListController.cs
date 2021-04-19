@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YouLookGoodInPrint.Shared;
-using YouLookGoodInPrint.Server.Entities;
+using YouLookGoodInPrint.Server.Data;
 using System.Collections.Generic;
 
 namespace YouLookGoodInPrint.Server.Controllers

@@ -1,31 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using YouLookGoodInPrint.Shared;
 
-namespace YouLookGoodInPrint.Server.Entities
+namespace YouLookGoodInPrint.Server.Data
 {
-    public class DocumentDataAccess
+    public class DocumentDataAccess: IDataAccess<Document>
     {
         private readonly Database database = new Database();
 
-        public void AddDocument(string name, string author, string content)
+        /*public void AddDocument(string name, string author, string content)
         {
             Document document = new Document(name, author, content);
             database.Documents.Add(document);
             database.SaveChanges();
-        }
+        }*/
 
-        public void AddDocument(Document document)
+        public void Add(Document document)
         {
             database.Documents.Add(document);
             database.SaveChanges();
         }
 
-        public bool DocumentExists(string id)
+        public void Remove(string id)
         {
-            return (database.Documents.Any(doc => doc.Id == id));
+            Document document = database.Documents.FirstOrDefault(doc => doc.Id == id);
+            database.Documents.Remove(document);
+        }
+
+        public Document Get(string id)
+        {
+            return database.Documents.FirstOrDefault(doc => doc.Id == id);
+        }
+
+        public bool Exists(string id)
+        {
+            return database.Documents.Any(doc => doc.Id == id);
         }
 
         public void ModifyDocument(string id, Document updatedDocument)
@@ -34,12 +43,6 @@ namespace YouLookGoodInPrint.Server.Entities
             document.Name = updatedDocument.Name;
             document.Content = updatedDocument.Content;
             database.SaveChanges();
-        }
-
-        public void DeleteDocument(string id)
-        {
-            Document document = database.Documents.FirstOrDefault(doc => doc.Id == id);
-            database.Documents.Remove(document);
         }
 
         public List<Document> GetDocumentsByAuthor(string name)

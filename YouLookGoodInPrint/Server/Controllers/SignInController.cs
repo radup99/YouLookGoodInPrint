@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YouLookGoodInPrint.Shared;
-using YouLookGoodInPrint.Server.Entities;
+using YouLookGoodInPrint.Server.Data;
 
 namespace YouLookGoodInPrint.Server.Controllers
 {
@@ -15,7 +15,7 @@ namespace YouLookGoodInPrint.Server.Controllers
         {
             ServerMessage response = new ServerMessage();
 
-            if (!Users.UserExists(credentials.Username))
+            if (!Users.UsernameExists(credentials.Username))
             {
                 response.Type = "error";
                 response.Message = "Username does not exist.";
@@ -23,7 +23,7 @@ namespace YouLookGoodInPrint.Server.Controllers
             }
                 
 
-            if (!Users.PasswordIsCorrect(credentials.Username, credentials.Password))
+            if (!Users.IsPasswordCorrect(credentials.Username, credentials.Password))
             {
                 response.Type = "error";
                 response.Message = "Incorrect password.";
