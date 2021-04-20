@@ -7,9 +7,9 @@ namespace YouLookGoodInPrint.Server.Data
     {
         private readonly Database database = new Database();
 
-        public void Add(User user)
+        public void Add(User item)
         {
-            database.Users.Add(user);
+            database.Users.Add(item);
             database.SaveChanges();
         }
 

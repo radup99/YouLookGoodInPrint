@@ -8,16 +8,9 @@ namespace YouLookGoodInPrint.Server.Data
     {
         private readonly Database database = new Database();
 
-        /*public void AddDocument(string name, string author, string content)
+        public void Add(Document item)
         {
-            Document document = new Document(name, author, content);
-            database.Documents.Add(document);
-            database.SaveChanges();
-        }*/
-
-        public void Add(Document document)
-        {
-            database.Documents.Add(document);
+            database.Documents.Add(item);
             database.SaveChanges();
         }
 

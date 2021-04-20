@@ -9,7 +9,7 @@ using YouLookGoodInPrint.Server.Data;
 namespace YouLookGoodInPrint.Server.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20210414114627_db")]
+    [Migration("20210420103434_db")]
     partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,6 +74,9 @@ namespace YouLookGoodInPrint.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Color")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DocId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Number")

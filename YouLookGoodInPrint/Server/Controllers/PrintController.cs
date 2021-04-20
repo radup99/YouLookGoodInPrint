@@ -8,13 +8,24 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("Print")]
     public class PrintController : ControllerBase
     {
+        private readonly UserDataAccess Users = new UserDataAccess();
         private readonly PrintDataAccess Prints = new PrintDataAccess();
 
         [HttpPost]
-        public ServerMessage Post([FromBody] Print printData)
+        public ServerMessage Post([FromBody] EntityData<Print> printData)
         {
             ServerMessage response = new ServerMessage();
-            Prints.Add(printData);
+
+            if (!Users.isTokenValid(printData.Username, printData.Token))
+            {
+                response.Type = "error";
+                response.Message = "Invalid token!";
+                return response;
+            }
+
+            response.Type = "success";
+            response.Message = "Document created successfully!";
+            Prints.Add(printData.Item);
             return response;
         }
 

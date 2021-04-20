@@ -45,7 +45,7 @@
                             @if (pContainer.Prints != null)
                                 foreach (var p in pContainer.Prints)
                                 {
-                                    if (doc.Id == p.IdDoc)
+                                    if (doc.Id == p.DocId)
                                     {
                                         <td>Printed on @p.PrintDate.ToShortDateString()</td>
                                     }
@@ -98,9 +98,9 @@
         ServerMessage message;
 
         Document document = docContainer.GetById(id);
-        DocumentData docData = new DocumentData(document, tokenContainer.UserName, tokenContainer.Token, "delete");
+        EntityData<Document> docData = new EntityData<Document>(document, tokenContainer.UserName, tokenContainer.Token, "delete");
 
-        response = await Http.PostAsJsonAsync<DocumentData>("Documents", docData);
+        response = await Http.PostAsJsonAsync<EntityData<Document>>("Documents", docData);
         message = await response.Content.ReadAsAsync<ServerMessage>();
 
         if (message.Type == "error")
@@ -111,17 +111,12 @@
 
         docContainer.DeleteDocument(id);
         status = "Document deleted.";
-
     }
 
     public async Task AccesUpload()
     {
         UriHelper.NavigateTo("upload");
-    
-
     }
-
-
 
     public async Task NewDocument()
     {
@@ -129,10 +124,10 @@
         ServerMessage message;
 
         Document newDocument = new Document("New Document", tokenContainer.UserName, "");
-        DocumentData docData = new DocumentData(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
+        EntityData<Document> docData = new EntityData<Document>(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
 
 
-        response = await Http.PostAsJsonAsync<DocumentData>("Documents", docData);
+        response = await Http.PostAsJsonAsync<EntityData<Document>>("Documents", docData);
         message = await response.Content.ReadAsAsync<ServerMessage>();
 
         if (message.Type == "error")

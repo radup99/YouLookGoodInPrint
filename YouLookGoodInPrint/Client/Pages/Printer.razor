@@ -30,9 +30,10 @@
 </form>
 <br>
 <button class="btn btn-primary" @onclick="Submit">Submit</button>
+<p>@status</p>
 
 @code {
-    public string Id = "";
+    public string docId = "";
     public string title = "Title";
     public string orientation = "Portrait";
     public string color = "Color";
@@ -42,11 +43,12 @@
     public bool color_bw = false;
     public int number = 1;
 
+    public string status = "";
 
 
     protected override async Task OnInitializedAsync()
     {
-        Id = docContainer.CurrentDocument.Id;
+        docId = docContainer.CurrentDocument.Id;
         title = docContainer.CurrentDocument.Name;
 
     }
@@ -71,8 +73,15 @@
             color = "Black-and-White";
         }
 
-        Print pdata = new Print(Id, title, orientation, color, number);
-        await Http.PostAsJsonAsync<Print>("Print", pdata);
-        UriHelper.NavigateTo("documents");
+        HttpResponseMessage response;
+        ServerMessage message;
+
+        Print print = new Print(docId, tokenContainer.UserName, orientation, color, number);
+        EntityData<Print> printData = new EntityData<Print>(print, tokenContainer.UserName, tokenContainer.Token, "");
+
+        response = await Http.PostAsJsonAsync<EntityData<Print>>("Print", printData);
+        message = await response.Content.ReadAsAsync<ServerMessage>();
+        status = message.Message;
+        //UriHelper.NavigateTo("documents");
     }
 }

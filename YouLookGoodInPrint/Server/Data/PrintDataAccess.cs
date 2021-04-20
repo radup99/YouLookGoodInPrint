@@ -6,20 +6,21 @@ namespace YouLookGoodInPrint.Server.Data
     public class PrintDataAccess : IDataAccess<Print>
     {
         private readonly Database database = new Database();
-        public void Add(Print print)
+        public void Add(Print item)
         {
-            database.Prints.Add(print);
+            database.Prints.Add(item);
             database.SaveChanges();
         }
         public void Remove(string id)
         {
-            Print print = database.Prints.FirstOrDefault(p => p.IdPrint == id);
+            Print print = database.Prints.FirstOrDefault(p => p.Id == id);
             database.Prints.Remove(print);
+            database.SaveChanges();
         }
 
         public Print Get(string id)
         {
-            return database.Prints.FirstOrDefault(p => p.IdPrint == id);
+            return database.Prints.FirstOrDefault(p => p.Id == id);
         }
 
         public bool Exists(string id)

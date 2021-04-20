@@ -70,9 +70,9 @@
         HttpResponseMessage response;
         ServerMessage message;
         Document newDocument = new Document(fileName, tokenContainer.UserName, storedName);
-        DocumentData docData = new DocumentData(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
+        EntityData<Document> docData = new EntityData<Document>(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
 
-        response = await Http.PostAsJsonAsync<DocumentData>("Documents", docData);
+        response = await Http.PostAsJsonAsync<EntityData<Document>>("Documents", docData);
         message = await response.Content.ReadAsAsync<ServerMessage>();
 
         if (message.Type == "error")
@@ -83,10 +83,6 @@
 
         docContainer.AddDocument(newDocument);
     }
-
-
-
-
 
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)

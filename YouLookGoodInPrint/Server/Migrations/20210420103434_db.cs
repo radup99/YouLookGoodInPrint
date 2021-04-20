@@ -27,6 +27,7 @@ namespace YouLookGoodInPrint.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    DocId = table.Column<string>(type: "TEXT", nullable: true),
                     Author = table.Column<string>(type: "TEXT", nullable: true),
                     PrintDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Orientation = table.Column<string>(type: "TEXT", nullable: true),

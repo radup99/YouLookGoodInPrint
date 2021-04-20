@@ -74,6 +74,9 @@ namespace YouLookGoodInPrint.Server.Migrations
                     b.Property<string>("Color")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("DocId")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Number")
                         .HasColumnType("INTEGER");
 
