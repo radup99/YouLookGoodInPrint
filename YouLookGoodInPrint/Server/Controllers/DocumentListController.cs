@@ -16,7 +16,7 @@ namespace YouLookGoodInPrint.Server.Controllers
         public List<Document> Post([FromBody] string token)
         {
             string username = Users.GetUsernameByToken(token);
-            return Documents.GetDocumentsByAuthor(username);
+            return Documents.GetByAuthor(username);
         }
 
     }

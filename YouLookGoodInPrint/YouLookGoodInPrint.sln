@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouLookGoodInPrint.Client",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouLookGoodInPrint.Shared", "Shared\YouLookGoodInPrint.Shared.csproj", "{95944F18-68BF-4C36-B1B7-2921BC07ED6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouLookGoodInPrint.Tests", "Tests\YouLookGoodInPrint.Tests.csproj", "{FCB4B7E7-89BC-4991-BE65-7E49276D8421}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{95944F18-68BF-4C36-B1B7-2921BC07ED6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95944F18-68BF-4C36-B1B7-2921BC07ED6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95944F18-68BF-4C36-B1B7-2921BC07ED6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCB4B7E7-89BC-4991-BE65-7E49276D8421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCB4B7E7-89BC-4991-BE65-7E49276D8421}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCB4B7E7-89BC-4991-BE65-7E49276D8421}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCB4B7E7-89BC-4991-BE65-7E49276D8421}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

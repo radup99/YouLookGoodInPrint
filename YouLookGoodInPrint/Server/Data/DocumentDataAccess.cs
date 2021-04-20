@@ -25,6 +25,11 @@ namespace YouLookGoodInPrint.Server.Data
             return database.Documents.FirstOrDefault(doc => doc.Id == id);
         }
 
+        public List<Document> GetByAuthor(string name)
+        {
+            return database.Documents.Where(doc => doc.Author == name).OrderBy(doc => doc.Name).ToList();
+        }
+
         public bool Exists(string id)
         {
             return database.Documents.Any(doc => doc.Id == id);
@@ -37,12 +42,6 @@ namespace YouLookGoodInPrint.Server.Data
             document.Content = updatedDocument.Content;
             database.SaveChanges();
         }
-
-        public List<Document> GetDocumentsByAuthor(string name)
-        {
-            return database.Documents.Where(doc => doc.Author == name).OrderBy(doc => doc.Name).ToList();
-        }
-
 
     }
 }

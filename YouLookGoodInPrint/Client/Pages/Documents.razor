@@ -28,7 +28,6 @@
                     <th>Title</th>
                     <th>Creation Date</th>
                     <th>Options</th>
-                    <th>Print Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,15 +41,6 @@
                             <button class="btn btn-primary" @onclick="() => Delete(doc.Id)">Delete</button>
                             <button class="btn btn-primary" @onclick="() => Print(doc.Name)">Print</button>
                         </td>
-                            @if (pContainer.Prints != null)
-                                foreach (var p in pContainer.Prints)
-                                {
-                                    if (doc.Id == p.DocId)
-                                    {
-                                        <td>Printed on @p.PrintDate.ToShortDateString()</td>
-                                    }
-                            }
-
                     </tr>
                 }
             </tbody>
