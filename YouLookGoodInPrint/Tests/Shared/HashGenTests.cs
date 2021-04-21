@@ -3,7 +3,7 @@ using YouLookGoodInPrint.Shared;
 
 namespace YouLookGoodInPrint.Tests.Shared
 {
-    public class HashGenTest
+    public class HashGenTests
     {
         [Fact]
         public void TestCorrectHash1()

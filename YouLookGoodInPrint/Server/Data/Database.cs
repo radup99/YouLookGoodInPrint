@@ -10,7 +10,6 @@ namespace YouLookGoodInPrint.Server.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<Print> Prints { get; set; }
-        //private static bool _created = false;
 
         public Database()
         {

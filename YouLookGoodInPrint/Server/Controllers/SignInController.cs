@@ -8,7 +8,13 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("SignIn")]
     public class SignInController : ControllerBase
     {
-        private readonly UserDataAccess Users = new UserDataAccess();
+        private readonly UserDataAccess Users;
+
+        public SignInController(Database database)
+        {
+            Database _database = database;
+            Users = new UserDataAccess(_database);
+        }
 
         [HttpPost]
         public ServerMessage Post([FromBody] Credentials credentials)

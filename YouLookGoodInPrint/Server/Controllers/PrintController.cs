@@ -8,8 +8,15 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("Print")]
     public class PrintController : ControllerBase
     {
-        private readonly UserDataAccess Users = new UserDataAccess();
-        private readonly PrintDataAccess Prints = new PrintDataAccess();
+        private readonly UserDataAccess Users;
+        private readonly PrintDataAccess Prints;
+
+        public PrintController(Database database)
+        {
+            Database _database = database;
+            Users = new UserDataAccess(_database);
+            Prints = new PrintDataAccess(_database);
+        }
 
         [HttpPost]
         public ServerMessage Post([FromBody] EntityData<Print> printData)
@@ -24,7 +31,7 @@ namespace YouLookGoodInPrint.Server.Controllers
             }
 
             response.Type = "success";
-            response.Message = "Document created successfully!";
+            response.Message = "Print request received successfully!";
             Prints.Add(printData.Item);
             return response;
         }

@@ -9,8 +9,16 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("Documents")]
     public class DocumentsController : ControllerBase
     {
-        private readonly UserDataAccess Users = new UserDataAccess();
-        private readonly DocumentDataAccess Documents = new DocumentDataAccess();
+ 
+        private readonly UserDataAccess Users;
+        private readonly DocumentDataAccess Documents;
+
+        public DocumentsController(Database database)
+        {
+            Database _database = database;
+            Users = new UserDataAccess(_database);
+            Documents = new DocumentDataAccess(_database);
+        }
 
         [HttpPost]
         public ServerMessage Post([FromBody] EntityData<Document> docData)

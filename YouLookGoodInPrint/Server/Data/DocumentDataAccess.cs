@@ -6,41 +6,46 @@ namespace YouLookGoodInPrint.Server.Data
 {
     public class DocumentDataAccess: IDataAccess<Document>
     {
-        private readonly Database database = new Database();
+        private readonly Database _database;
+
+        public DocumentDataAccess(Database database)
+        {
+            _database = database;
+        }
 
         public void Add(Document item)
         {
-            database.Documents.Add(item);
-            database.SaveChanges();
+            _database.Documents.Add(item);
+            _database.SaveChanges();
         }
 
         public void Remove(string id)
         {
-            Document document = database.Documents.FirstOrDefault(doc => doc.Id == id);
-            database.Documents.Remove(document);
+            Document document = _database.Documents.FirstOrDefault(doc => doc.Id == id);
+            _database.Documents.Remove(document);
         }
 
         public Document Get(string id)
         {
-            return database.Documents.FirstOrDefault(doc => doc.Id == id);
+            return _database.Documents.FirstOrDefault(doc => doc.Id == id);
         }
 
         public List<Document> GetByAuthor(string name)
         {
-            return database.Documents.Where(doc => doc.Author == name).OrderBy(doc => doc.Name).ToList();
+            return _database.Documents.Where(doc => doc.Author == name).OrderBy(doc => doc.Name).ToList();
         }
 
         public bool Exists(string id)
         {
-            return database.Documents.Any(doc => doc.Id == id);
+            return _database.Documents.Any(doc => doc.Id == id);
         }
 
         public void ModifyDocument(string id, Document updatedDocument)
         {
-            Document document = database.Documents.FirstOrDefault(doc => doc.Id == id);
+            Document document = _database.Documents.FirstOrDefault(doc => doc.Id == id);
             document.Name = updatedDocument.Name;
             document.Content = updatedDocument.Content;
-            database.SaveChanges();
+            _database.SaveChanges();
         }
 
     }

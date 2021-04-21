@@ -2,6 +2,7 @@
 using YouLookGoodInPrint.Shared;
 using YouLookGoodInPrint.Server.Data;
 using YouLookGoodInPrint.Server.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace YouLookGoodInPrint.Server.Controllers
 {
@@ -9,7 +10,13 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("Register")]
     public class RegisterController : ControllerBase
     {
-        private readonly UserDataAccess Users = new UserDataAccess();
+        private readonly UserDataAccess Users;
+
+        public RegisterController(Database database)
+        {
+            Database _database = database;
+            Users = new UserDataAccess(_database);
+        }
 
         [HttpPost]
         public string Post([FromBody] RegistrationData rdata)

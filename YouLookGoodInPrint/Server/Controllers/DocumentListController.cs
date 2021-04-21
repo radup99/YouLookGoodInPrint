@@ -9,8 +9,15 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("DocumentList")]
     public class DocumentListController : ControllerBase
     {
-        private readonly UserDataAccess Users = new UserDataAccess();
-        private readonly DocumentDataAccess Documents = new DocumentDataAccess();
+        private readonly UserDataAccess Users;
+        private readonly DocumentDataAccess Documents;
+
+        public DocumentListController(Database database)
+        {
+            Database _database = database;
+            Users = new UserDataAccess(_database);
+            Documents = new DocumentDataAccess(_database);
+        }
 
         [HttpPost]
         public List<Document> Post([FromBody] string token)
