@@ -24,30 +24,35 @@
             <ul>
                 @foreach (var file in files)
                 { 
-                    <li>
-                        File: @file.Name
-                        <br>
-                        @if (FileUpload(uploadResults, file.Name, logger,
-                     out var result))
-                        {
-                            <span>
-                                Stored File Name: @result.StoredFileName
-                            </span>
-                            if(count>=numberDoc)
-                            {
-                            @AddDocument(file.Name, result.StoredFileName);
-                            numberDoc = numberDoc + 1;
-                             }
-                            count = count + 1;
-                        }
-                        else
-                        {
-                            <span>
-                                There was an error uploading the file
-                                (Error: @result.ErrorCode).
-                            </span>
-                        }
-                    </li>
+                <li>
+                    File: @file.Name
+                    <br>
+                    @if (FileUpload(uploadResults, file.Name, logger,
+                out var result))
+                    {
+                        // <span>
+                        //     Stored File Name: @result.StoredFileName
+                        // </span>
+                
+                    if(count>=numberDoc)
+                    {
+                <p hidden>
+                    @AddDocument(file.Name, result.StoredFileName);
+                </p>
+                    numberDoc = numberDoc + 1;
+                    }
+                
+                count = count + 1;
+
+                }
+                else
+                {
+                <span>
+                    There was an error uploading the file
+                    (Error: @result.ErrorCode).
+                </span>
+                }
+                </li>
                 }
             </ul>
         </div>
