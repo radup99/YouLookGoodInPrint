@@ -124,8 +124,8 @@
 
         HttpResponseMessage response;
         ServerMessage message;
-        EntityData<Document> docData = new EntityData<Document>(docContainer.CurrentDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
-        response = await Http.PostAsJsonAsync<EntityData<Document>>("Documents", docData);
+        ItemData<Document> docData = new ItemData<Document>(docContainer.CurrentDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
+        response = await Http.PostAsJsonAsync<ItemData<Document>>("Documents", docData);
         message = await response.Content.ReadAsAsync<ServerMessage>();
 
         if (message.Type == "error")
@@ -148,8 +148,8 @@
 
         HttpResponseMessage response;
         ServerMessage message;
-        EntityData<Document> docData = new EntityData<Document>(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
-        response = await Http.PostAsJsonAsync<EntityData<Document>>("Documents", docData);
+        ItemData<Document> docData = new ItemData<Document>(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
+        response = await Http.PostAsJsonAsync<ItemData<Document>>("Documents", docData);
         message = await response.Content.ReadAsAsync<ServerMessage>();
 
         if (message.Type == "error")

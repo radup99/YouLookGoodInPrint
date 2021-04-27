@@ -19,7 +19,7 @@ namespace YouLookGoodInPrint.Server.Controllers
         }
 
         [HttpPost]
-        public ServerMessage Post([FromBody] EntityData<Print> printData)
+        public ServerMessage Post([FromBody] ItemData<Print> printData)
         {
             ServerMessage response = new ServerMessage();
 

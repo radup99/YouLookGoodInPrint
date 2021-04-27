@@ -43,9 +43,9 @@
         for (int i = 1; i <= testCount; i++)
         {
             Document newDocument = new Document("Test Document " + i, tokenContainer.UserName, "test");
-            EntityData<Document> docData = new EntityData<Document>(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
+            ItemData<Document> docData = new ItemData<Document>(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
 
-            response = await Http.PostAsJsonAsync<EntityData<Document>>("Documents", docData);
+            response = await Http.PostAsJsonAsync<ItemData<Document>>("Documents", docData);
             message = await response.Content.ReadAsAsync<ServerMessage>();
 
             if (message.Type != "error")

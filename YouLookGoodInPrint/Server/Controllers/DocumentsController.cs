@@ -21,7 +21,7 @@ namespace YouLookGoodInPrint.Server.Controllers
         }
 
         [HttpPost]
-        public ServerMessage Post([FromBody] EntityData<Document> docData)
+        public ServerMessage Post([FromBody] ItemData<Document> docData)
         {
             ServerMessage response = new ServerMessage();
 

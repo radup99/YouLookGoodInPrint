@@ -9,14 +9,14 @@ using YouLookGoodInPrint.Server.Data;
 namespace YouLookGoodInPrint.Server.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20210421123832_db")]
+    [Migration("20210427182820_db")]
     partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.4");
+                .HasAnnotation("ProductVersion", "6.0.0-preview.2.21154.2");
 
             modelBuilder.Entity("YouLookGoodInPrint.Server.Entities.User", b =>
                 {

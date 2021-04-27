@@ -88,9 +88,9 @@
         ServerMessage message;
 
         Document document = docContainer.GetById(id);
-        EntityData<Document> docData = new EntityData<Document>(document, tokenContainer.UserName, tokenContainer.Token, "delete");
+        ItemData<Document> docData = new ItemData<Document>(document, tokenContainer.UserName, tokenContainer.Token, "delete");
 
-        response = await Http.PostAsJsonAsync<EntityData<Document>>("Documents", docData);
+        response = await Http.PostAsJsonAsync<ItemData<Document>>("Documents", docData);
         message = await response.Content.ReadAsAsync<ServerMessage>();
 
         if (message.Type == "error")
@@ -114,10 +114,10 @@
         ServerMessage message;
 
         Document newDocument = new Document("New Document", tokenContainer.UserName, "");
-        EntityData<Document> docData = new EntityData<Document>(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
+        ItemData<Document> docData = new ItemData<Document>(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
 
 
-        response = await Http.PostAsJsonAsync<EntityData<Document>>("Documents", docData);
+        response = await Http.PostAsJsonAsync<ItemData<Document>>("Documents", docData);
         message = await response.Content.ReadAsAsync<ServerMessage>();
 
         if (message.Type == "error")

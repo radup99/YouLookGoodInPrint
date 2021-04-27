@@ -30,7 +30,7 @@ namespace YouLookGoodInPrint.Tests.Server
             string incorrectToken = "gqOzFeEequaoKj0FA3Ot";
 
             Document document = new Document("New Document", "admin", "Sample Content");
-            EntityData<Document> docData = new EntityData<Document>(document, Username, incorrectToken, "create");
+            ItemData<Document> docData = new ItemData<Document>(document, Username, incorrectToken, "create");
 
             ServerMessage message = controller.Post(docData);
             Assert.Equal("Invalid token!", message.Message);
@@ -43,14 +43,14 @@ namespace YouLookGoodInPrint.Tests.Server
             DocumentsController controller = new DocumentsController(Database);
 
             Document document = new Document("Test Document", Username, "Test");
-            EntityData<Document> docData = new EntityData<Document>(document, Username, Token, "create");
+            ItemData<Document> docData = new ItemData<Document>(document, Username, Token, "create");
 
             ServerMessage message = controller.Post(docData);
             Assert.Equal("Document created successfully!", message.Message);
 
             Document editedDocument = document;
             document.Content = "Modified content";
-            EntityData<Document> modifDocData = new EntityData<Document>(editedDocument, Username, Token, "create");
+            ItemData<Document> modifDocData = new ItemData<Document>(editedDocument, Username, Token, "create");
 
             ServerMessage message2 = controller.Post(docData);
             Assert.Equal("Document saved successfully!", message2.Message);

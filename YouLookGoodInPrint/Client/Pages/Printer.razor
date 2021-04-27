@@ -77,9 +77,9 @@
         ServerMessage message;
 
         Print print = new Print(docId, tokenContainer.UserName, orientation, color, number);
-        EntityData<Print> printData = new EntityData<Print>(print, tokenContainer.UserName, tokenContainer.Token, "");
+        ItemData<Print> printData = new ItemData<Print>(print, tokenContainer.UserName, tokenContainer.Token, "");
 
-        response = await Http.PostAsJsonAsync<EntityData<Print>>("Print", printData);
+        response = await Http.PostAsJsonAsync<ItemData<Print>>("Print", printData);
         message = await response.Content.ReadAsAsync<ServerMessage>();
         status = message.Message;
         //UriHelper.NavigateTo("documents");

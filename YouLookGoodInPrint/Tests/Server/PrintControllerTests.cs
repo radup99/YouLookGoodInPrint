@@ -30,7 +30,7 @@ namespace YouLookGoodInPrint.Tests.Server
             string incorrectToken = "gqOzFeEequaoKj0FA3Ot";
 
             Print print = new Print("a63ace1a-2e91-4758-a98f-721d5a3da791", Username, "Landscape", "Black-and-White", 3);
-            EntityData<Print> printData = new EntityData<Print>(print, Username, incorrectToken, "create");
+            ItemData<Print> printData = new ItemData<Print>(print, Username, incorrectToken, "create");
 
             ServerMessage message = controller.Post(printData);
             Assert.Equal("Invalid token!", message.Message);
@@ -43,7 +43,7 @@ namespace YouLookGoodInPrint.Tests.Server
             PrintController controller = new PrintController(Database);
 
             Print print = new Print("a63ace1a-2e91-4758-a98f-721d5a3da791", Username, "Landscape", "Black-and-White", 3);
-            EntityData<Print> printData = new EntityData<Print>(print, Username, Token, "create");
+            ItemData<Print> printData = new ItemData<Print>(print, Username, Token, "create");
 
             ServerMessage message = controller.Post(printData);
             Assert.Equal("Print request received successfully!", message.Message);
