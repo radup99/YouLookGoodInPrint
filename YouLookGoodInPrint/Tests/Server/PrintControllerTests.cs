@@ -8,25 +8,26 @@ namespace YouLookGoodInPrint.Tests.Server
     public class PrintControllerTests
     {
         FakeDatabase Database = new FakeDatabase();
+        TokenList tokenList;
+
         string Token = "R0dudMbiXWqf7C1GKH4V";
         string Username = "admin";
         string Password = "admin";
         
-
         public void SetupDatabase()
         {
             User admin = new User(Username, Password.GetHash(), "", "");
-            admin.Token = Token;
 
             Database.Users.Add(admin);
             Database.SaveChanges();
+            tokenList = new TokenList(Database);
         }
 
         [Fact]
         public void TestTokenCheck()
         {
             SetupDatabase();
-            PrintController controller = new PrintController(Database);
+            PrintController controller = new PrintController(Database, tokenList);
             string incorrectToken = "gqOzFeEequaoKj0FA3Ot";
 
             Print print = new Print("a63ace1a-2e91-4758-a98f-721d5a3da791", Username, "Landscape", "Black-and-White", 3);
@@ -40,7 +41,7 @@ namespace YouLookGoodInPrint.Tests.Server
         public void TestAddPrint()
         {
             SetupDatabase();
-            PrintController controller = new PrintController(Database);
+            PrintController controller = new PrintController(Database, tokenList);
 
             Print print = new Print("a63ace1a-2e91-4758-a98f-721d5a3da791", Username, "Landscape", "Black-and-White", 3);
             ItemData<Print> printData = new ItemData<Print>(print, Username, Token, "create");

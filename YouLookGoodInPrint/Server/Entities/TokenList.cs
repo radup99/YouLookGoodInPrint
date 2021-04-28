@@ -39,6 +39,18 @@ namespace YouLookGoodInPrint.Server.Entities
             return "null";
         }
 
+        public void ChangeToken(string username, string newToken)
+        {
+            foreach (KeyValuePair<string, string> entry in _tokenDict)
+            {
+                if (entry.Value == username)
+                {
+                    _tokenDict.Remove(entry.Key);
+                    _tokenDict.Add(newToken, username);
+                }
+            }
+        }
+
         public string GetUsername(string token)
         {
             return _tokenDict[token];

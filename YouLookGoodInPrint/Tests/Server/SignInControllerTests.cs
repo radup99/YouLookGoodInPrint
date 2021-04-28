@@ -8,6 +8,7 @@ namespace YouLookGoodInPrint.Tests.Server
     public class SignInControllerTests
     {
         FakeDatabase database = new FakeDatabase();
+        TokenList tokenList;
 
         public void SetupDatabase()
         {
@@ -16,12 +17,14 @@ namespace YouLookGoodInPrint.Tests.Server
             database.Users.Add(admin);
             database.Users.Add(matei);
             database.SaveChanges();
+
+            tokenList = new TokenList(database);
         }
         [Fact]
         public void TestLogin()
         {
             SetupDatabase();
-            SignInController controller = new SignInController(database);
+            SignInController controller = new SignInController(database, tokenList);
 
             string username = "admin";
             string password = "admin".GetHash();
@@ -35,7 +38,7 @@ namespace YouLookGoodInPrint.Tests.Server
         public void TestIncorrectPassword()
         {
             SetupDatabase();
-            SignInController controller = new SignInController(database);
+            SignInController controller = new SignInController(database, tokenList);
 
             string username = "matei33";
             string password = "matei33".GetHash();
@@ -49,7 +52,7 @@ namespace YouLookGoodInPrint.Tests.Server
         public void TestNonExistentUsername()
         {
             SetupDatabase();
-            SignInController controller = new SignInController(database);
+            SignInController controller = new SignInController(database, tokenList);
 
             string username = "john4";
             string password = "password".GetHash();

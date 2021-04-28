@@ -9,7 +9,7 @@ using YouLookGoodInPrint.Server.Data;
 namespace YouLookGoodInPrint.Server.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20210427182820_db")]
+    [Migration("20210428134931_db")]
     partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,9 +30,6 @@ namespace YouLookGoodInPrint.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Token")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Username")

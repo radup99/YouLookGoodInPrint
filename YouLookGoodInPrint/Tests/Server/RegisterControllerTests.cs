@@ -12,18 +12,21 @@ namespace YouLookGoodInPrint.Tests.Server
     public class RegisterControllerTests
     {
         FakeDatabase database = new FakeDatabase();
+        TokenList tokenList;
 
         public void SetupDatabase()
         {
             User admin = new User("admin", "admin".GetHash(), "", "");
             database.Users.Add(admin);
             database.SaveChanges();
+
+            tokenList = new TokenList(database);
         }
         [Fact]
         public void TestRegister()
         {
             SetupDatabase();
-            RegisterController controller = new RegisterController(database);
+            RegisterController controller = new RegisterController(database, tokenList);
 
             string username = "ion44";
             string password = "!234gfh".GetHash();
@@ -39,7 +42,7 @@ namespace YouLookGoodInPrint.Tests.Server
         public void TestExistingUsername()
         {
             SetupDatabase();
-            RegisterController controller = new RegisterController(database);
+            RegisterController controller = new RegisterController(database, tokenList);
 
             string username = "admin";
             string password = "admin123".GetHash();
