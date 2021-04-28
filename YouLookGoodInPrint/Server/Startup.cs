@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using YouLookGoodInPrint.Server.Data;
+using YouLookGoodInPrint.Server.Entities;
 
 namespace YouLookGoodInPrint.Server
 {
@@ -24,6 +25,8 @@ namespace YouLookGoodInPrint.Server
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddDbContext<Database>();
+            Database database = new Database();
+            services.AddSingleton<TokenList>(new TokenList(database));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

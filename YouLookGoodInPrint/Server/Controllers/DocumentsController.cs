@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YouLookGoodInPrint.Shared;
 using YouLookGoodInPrint.Server.Data;
-
+using YouLookGoodInPrint.Server.Entities;
 
 namespace YouLookGoodInPrint.Server.Controllers
 {
@@ -12,12 +12,14 @@ namespace YouLookGoodInPrint.Server.Controllers
  
         private readonly UserDataAccess Users;
         private readonly DocumentDataAccess Documents;
+        private TokenList Tokens;
 
-        public DocumentsController(Database database)
+        public DocumentsController(Database database, TokenList tokenList)
         {
             Database _database = database;
             Users = new UserDataAccess(_database);
             Documents = new DocumentDataAccess(_database);
+            Tokens = tokenList;
         }
 
         [HttpPost]
@@ -25,7 +27,7 @@ namespace YouLookGoodInPrint.Server.Controllers
         {
             ServerMessage response = new ServerMessage();
 
-            if(!Users.isTokenValid(docData.Username, docData.Token))
+            if(!Tokens.IsTokenValid(docData.Username, docData.Token))
             {
                 response.Type = "error";
                 response.Message = "Invalid token!";

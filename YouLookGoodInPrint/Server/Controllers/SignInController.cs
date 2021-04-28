@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YouLookGoodInPrint.Shared;
 using YouLookGoodInPrint.Server.Data;
+using YouLookGoodInPrint.Server.Entities;
 
 namespace YouLookGoodInPrint.Server.Controllers
 {
@@ -9,11 +10,13 @@ namespace YouLookGoodInPrint.Server.Controllers
     public class SignInController : ControllerBase
     {
         private readonly UserDataAccess Users;
+        private TokenList Tokens;
 
-        public SignInController(Database database)
+        public SignInController(Database database, TokenList tokenList)
         {
             Database _database = database;
             Users = new UserDataAccess(_database);
+            Tokens = tokenList;
         }
 
         [HttpPost]
@@ -37,7 +40,7 @@ namespace YouLookGoodInPrint.Server.Controllers
             }
 
             response.Type = "token";
-            response.Message = Users.GetUserToken(credentials.Username);
+            response.Message = Tokens.GetToken(credentials.Username);
             return response;
         }
 

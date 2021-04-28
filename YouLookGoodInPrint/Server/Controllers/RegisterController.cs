@@ -11,11 +11,13 @@ namespace YouLookGoodInPrint.Server.Controllers
     public class RegisterController : ControllerBase
     {
         private readonly UserDataAccess Users;
+        private TokenList Tokens;
 
-        public RegisterController(Database database)
+        public RegisterController(Database database, TokenList tokenList)
         {
             Database _database = database;
             Users = new UserDataAccess(_database);
+            Tokens = tokenList;
         }
 
         [HttpPost]
@@ -26,6 +28,7 @@ namespace YouLookGoodInPrint.Server.Controllers
 
             User user = new User(rdata.Username, rdata.Password, rdata.RealName, rdata.Email);
             Users.Add(user);
+            Tokens.AddUser(rdata.Username);
             return "Registration complete!";
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using YouLookGoodInPrint.Server.Entities;
 
 namespace YouLookGoodInPrint.Server.Data
@@ -29,6 +30,11 @@ namespace YouLookGoodInPrint.Server.Data
             return _database.Users.FirstOrDefault(user => user.Id == id);
         }
 
+        public List<string> GetAllUsernames()
+        {
+            return _database.Users.Select(user => user.Username).ToList();
+        }
+
         public bool Exists(string id)
         {
             return _database.Users.Any(user => user.Id == id);
@@ -44,21 +50,6 @@ namespace YouLookGoodInPrint.Server.Data
             if (_database.Users.Any(user => user.Username == username && user.Password == password))
                 return true;
             return false;
-        }
-
-        public string GetUserToken(string username)
-        {
-            return _database.Users.Where(user => user.Username == username).Select(user => user.Token).ToArray()[0];
-        }
-
-        public string GetUsernameByToken(string token)
-        {
-            return _database.Users.Where(user => user.Token == token).Select(user => user.Username).ToArray()[0];
-        }
-
-        public bool isTokenValid(string username, string token)
-        {
-            return (_database.Users.Where(user => user.Username == username).Select(user => user.Token).ToArray()[0] == token);
         }
     }
 }
