@@ -10,7 +10,7 @@ namespace YouLookGoodInPrint.Server.Controllers
     public class SignInController : ControllerBase
     {
         private readonly UserDataAccess Users;
-        private TokenList Tokens;
+        private readonly TokenList Tokens;
 
         public SignInController(Database database, TokenList tokenList)
         {

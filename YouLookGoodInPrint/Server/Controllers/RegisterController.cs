@@ -11,7 +11,7 @@ namespace YouLookGoodInPrint.Server.Controllers
     public class RegisterController : ControllerBase
     {
         private readonly UserDataAccess Users;
-        private TokenList Tokens;
+        private readonly TokenList Tokens;
 
         public RegisterController(Database database, TokenList tokenList)
         {

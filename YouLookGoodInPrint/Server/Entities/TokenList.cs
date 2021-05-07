@@ -8,11 +8,10 @@ namespace YouLookGoodInPrint.Server.Entities
     public class TokenList
     {
         private Dictionary<string, string> _tokenDict = new Dictionary<string, string>();
-        private UserDataAccess userDataAccess;
 
         public TokenList(Database database)
         {
-            userDataAccess = new UserDataAccess(database);
+            UserDataAccess userDataAccess = new UserDataAccess(database);
             List<string> usernames = userDataAccess.GetAllUsernames();
 
             foreach (string username in usernames)
@@ -58,7 +57,16 @@ namespace YouLookGoodInPrint.Server.Entities
 
         public bool IsTokenValid(string username, string token)
         {
-            return (_tokenDict[token] == username);
+            foreach (KeyValuePair<string, string> entry in _tokenDict)
+            {
+                if (entry.Key == token)
+                {
+                    if (entry.Value == username)
+                        return true;
+                    return false;
+                }  
+            }
+            return false;
         }
 
         private string GenerateToken()

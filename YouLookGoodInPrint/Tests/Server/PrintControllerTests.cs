@@ -21,6 +21,7 @@ namespace YouLookGoodInPrint.Tests.Server
             Database.Users.Add(admin);
             Database.SaveChanges();
             tokenList = new TokenList(Database);
+            tokenList.ChangeToken(Username, Token);
         }
 
         [Fact]

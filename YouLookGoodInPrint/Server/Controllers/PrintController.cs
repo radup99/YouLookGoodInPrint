@@ -9,14 +9,12 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("Print")]
     public class PrintController : ControllerBase
     {
-        private readonly UserDataAccess Users;
         private readonly PrintDataAccess Prints;
-        private TokenList Tokens;
+        private readonly TokenList Tokens;
 
         public PrintController(Database database, TokenList tokenList)
         {
             Database _database = database;
-            Users = new UserDataAccess(_database);
             Prints = new PrintDataAccess(_database);
             Tokens = tokenList;
         }

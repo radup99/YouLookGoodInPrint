@@ -9,15 +9,12 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("Documents")]
     public class DocumentsController : ControllerBase
     {
- 
-        private readonly UserDataAccess Users;
         private readonly DocumentDataAccess Documents;
-        private TokenList Tokens;
+        private readonly TokenList Tokens;
 
         public DocumentsController(Database database, TokenList tokenList)
         {
             Database _database = database;
-            Users = new UserDataAccess(_database);
             Documents = new DocumentDataAccess(_database);
             Tokens = tokenList;
         }

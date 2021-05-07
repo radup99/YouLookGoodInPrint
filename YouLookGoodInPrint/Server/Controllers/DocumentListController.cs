@@ -10,14 +10,12 @@ namespace YouLookGoodInPrint.Server.Controllers
     [Route("DocumentList")]
     public class DocumentListController : ControllerBase
     {
-        private readonly UserDataAccess Users;
         private readonly DocumentDataAccess Documents;
-        private TokenList TokenList;
+        private readonly TokenList TokenList;
 
         public DocumentListController(Database database, TokenList tokenList)
         {
             Database _database = database;
-            Users = new UserDataAccess(_database);
             Documents = new DocumentDataAccess(_database);
             TokenList = tokenList;
         }
