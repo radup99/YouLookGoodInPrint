@@ -1,0 +1,62 @@
+﻿@page "/payments"
+@using System.Net.Http.Json
+@using YouLookGoodInPrint.Shared
+@using YouLookGoodInPrint.Shared.Entities
+@inject HttpClient Http
+@inject TokenContainer tokenContainer
+@inject DocumentsContainer docContainer
+@inject PrintContainer pContainer
+@inject NavigationManager UriHelper
+@inject PaymentsContainer payContainer
+<h3>Payments</h3>
+
+@{
+    @if (tokenContainer.Token == "null")
+    {
+        <p>You are not signed in.</p>
+    }
+
+    else if (docContainer.Documents == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Document Title</th>
+                    <th>Details</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pay in payContainer.Payments)
+                {
+                    <tr>
+                        <td>@pay.DocumentTitle</td>
+                        <td>@pay.Details</td>
+                        <td>@pay.Price</td>
+                        <td>
+                            <button class="btn btn-primary" @onclick="() => Delete(pay.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button class="btn btn-primary">Checkout</button>
+
+    }
+}
+
+@code {
+    public async Task Delete(string id)
+    {
+        Payment payment = payContainer.GetById(id);
+        ItemData<Payment> payData = new ItemData<Payment>(payment, tokenContainer.UserName, tokenContainer.Token, "delete");
+
+        payContainer.DeletePayment(id);
+    }
+}

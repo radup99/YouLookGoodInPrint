@@ -17,6 +17,7 @@ namespace YouLookGoodInPrint.Client
             builder.Services.AddSingleton<TokenContainer>();
             builder.Services.AddSingleton<DocumentsContainer>();
             builder.Services.AddSingleton<PrintContainer>();
+            builder.Services.AddSingleton<PaymentsContainer>();
 
             await builder.Build().RunAsync();
         }
