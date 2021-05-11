@@ -9,7 +9,7 @@ using YouLookGoodInPrint.Server.Data;
 namespace YouLookGoodInPrint.Server.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20210428134931_db")]
+    [Migration("20210511193009_db")]
     partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,28 @@ namespace YouLookGoodInPrint.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("YouLookGoodInPrint.Shared.Entities.Payment", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DocumentTitle")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("PrintId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("YouLookGoodInPrint.Shared.Print", b =>

@@ -7,6 +7,7 @@
 @inject DocumentsContainer docContainer
 @inject NavigationManager UriHelper
 @inject PaymentsContainer payContainer
+@inject PrintContainer printContainer
 
 <h3>@title</h3>
 <br>
@@ -47,12 +48,52 @@
 
     public string status = "";
 
-
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         docId = docContainer.CurrentDocument.Id;
         title = docContainer.CurrentDocument.Name;
 
+        if (!payContainer.NoPaymentSelected)
+        {
+            number = printContainer.CurrentPrint.Number;
+
+            if (printContainer.CurrentPrint.Orientation == "Landscape")
+            {
+                orientation_l = true;
+                orientation_p = false;
+            }
+
+            else
+            {
+                orientation_l = false;
+                orientation_p = true;
+            }
+
+            if (printContainer.CurrentPrint.Color == "Color")
+            {
+                color_c = true;
+                color_bw = false;
+            }
+
+            else
+            {
+                color_c = false;
+                color_bw = true;
+            }
+        }
+
+    }
+
+    public double CalculatePrice(Print print)
+    {
+        double pagePrice;
+
+        if (print.Color == "Black-and-White")
+            pagePrice = 0.05;
+        else
+            pagePrice = 0.15;
+
+        return pagePrice * print.Number;
     }
 
 
@@ -79,14 +120,11 @@
         ServerMessage message;
 
         Print print = new Print(docId, tokenContainer.UserName, orientation, color, number);
-        ItemData<Print> printData = new ItemData<Print>(print, tokenContainer.UserName, tokenContainer.Token, "");
-
-        response = await Http.PostAsJsonAsync<ItemData<Print>>("Print", printData);
-        message = await response.Content.ReadAsAsync<ServerMessage>();
-        status = message.Message;
-
-        Payment payment = new Payment(tokenContainer.UserName, docContainer.CurrentDocument.Name, print.Id, 0.15, "");
+        printContainer.AddPrint(print);
+        
+        double price = CalculatePrice(print);
+        Payment payment = new Payment(tokenContainer.UserName, title, print.Id, price);
         payContainer.AddPayment(payment);
-        //UriHelper.NavigateTo("documents");
-}
+        UriHelper.NavigateTo("cart");
+    }
 }

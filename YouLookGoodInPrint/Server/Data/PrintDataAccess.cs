@@ -31,7 +31,7 @@ namespace YouLookGoodInPrint.Server.Data
 
         public bool Exists(string id)
         {
-            return _database.Documents.Any(doc => doc.Id == id);
+            return _database.Prints.Any(p => p.Id == id);
         }
 
     }

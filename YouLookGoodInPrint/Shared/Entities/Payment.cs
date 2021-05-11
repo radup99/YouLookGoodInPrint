@@ -16,16 +16,14 @@ namespace YouLookGoodInPrint.Shared.Entities
 
         public double Price { get; set; }
 
-        public string Details { get; set; }
 
-        public Payment (string username, string documentTitle, string printId, double price, string details)
+        public Payment (string username, string documentTitle, string printId, double price)
         {
             this.Id = Guid.NewGuid().ToString();
             this.Username = username;
             this.DocumentTitle = documentTitle;
             this.PrintId = printId;
             this.Price = price;
-            this.Details = details;
         }
     }
 }

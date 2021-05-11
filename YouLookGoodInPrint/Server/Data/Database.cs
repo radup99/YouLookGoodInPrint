@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using YouLookGoodInPrint.Server.Entities;
 using YouLookGoodInPrint.Shared;
-
+using YouLookGoodInPrint.Shared.Entities;
 
 namespace YouLookGoodInPrint.Server.Data
 {
@@ -10,6 +10,7 @@ namespace YouLookGoodInPrint.Server.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<Print> Prints { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         public Database()
         {

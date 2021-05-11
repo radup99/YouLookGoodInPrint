@@ -7,9 +7,9 @@ namespace YouLookGoodInPrint.Client
 {
     public class PaymentsContainer
     {
-        private List<Payment> _payments;
+        private List<Payment> _payments = new List<Payment>();
 
-        private Payment _currentPayment;
+        private Payment _currentPayment = new Payment("", "", "", 0.5);
         private bool _noPaymentSelected = true;
 
         public List<Payment> Payments
@@ -56,7 +56,7 @@ namespace YouLookGoodInPrint.Client
                     return pay;
                 }
 
-            return new Payment("" , "", "", 0.15, "");
+            return new Payment("" , "", "", 0.15);
         }
 
         public void SelectPayment(Payment payment)
@@ -75,6 +75,15 @@ namespace YouLookGoodInPrint.Client
                 }
         }
 
+        public double PriceSum()
+        {
+            double sum = 0;
+            foreach (Payment pay in Payments)
+                sum += pay.Price;
+
+            return sum;
+        }
+
         public void DeletePayment(Payment payment)
         {
             Payments.Remove(payment);
@@ -84,7 +93,6 @@ namespace YouLookGoodInPrint.Client
         public void AddPayment(Payment payment)
         {
             Payments.Add(payment);
-            SortByName();
             NotifyStateChanged();
         }
 

@@ -6,7 +6,7 @@ namespace YouLookGoodInPrint.Client
 {
     public class PrintContainer
     {
-        private List<Print> _prints;
+        private List<Print> _prints = new List<Print>();
 
         private Print _currentPrint = new Print("", "", "", "", 0);
 
@@ -38,6 +38,33 @@ namespace YouLookGoodInPrint.Client
         public void selectPrint(Print print)
         {
             this._currentPrint = print;
+        }
+
+        public Print GetById(string id)
+        {
+            foreach (Print pr in Prints)
+                if (pr.Id == id)
+                {
+                    return pr;
+                }
+
+            return new Print("", "", "", "", 0);
+        }
+
+        public void DeletePrint(string id)
+        {
+            foreach (Print pr in Prints)
+                if (pr.Id == id)
+                {
+                    Prints.Remove(pr);
+                    NotifyStateChanged();
+                }
+        }
+
+        public void AddPrint(Print print)
+        {
+            Prints.Add(print);
+            NotifyStateChanged();
         }
 
         public event Action OnChange;

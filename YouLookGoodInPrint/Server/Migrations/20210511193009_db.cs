@@ -23,6 +23,21 @@ namespace YouLookGoodInPrint.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Username = table.Column<string>(type: "TEXT", nullable: true),
+                    DocumentTitle = table.Column<string>(type: "TEXT", nullable: true),
+                    PrintId = table.Column<string>(type: "TEXT", nullable: true),
+                    Price = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Prints",
                 columns: table => new
                 {
@@ -59,6 +74,9 @@ namespace YouLookGoodInPrint.Server.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Documents");
+
+            migrationBuilder.DropTable(
+                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "Prints");
