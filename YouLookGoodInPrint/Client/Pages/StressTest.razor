@@ -42,7 +42,7 @@
         double startTime = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds;
         for (int i = 1; i <= testCount; i++)
         {
-            Document newDocument = new Document("Test Document " + i, tokenContainer.UserName, "test");
+            Document newDocument = new Document("Test Document " + i, tokenContainer.UserName, "test", "0");
             ItemData<Document> docData = new ItemData<Document>(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
 
             response = await Http.PostAsJsonAsync<ItemData<Document>>("Documents", docData);

@@ -7,9 +7,9 @@ namespace YouLookGoodInPrint.Client
     public class DocumentsContainer
     {
         private List<Document> _documents;
-
-        private Document _currentDocument = new Document("", "", "");
+        private Document _currentDocument = new Document("", "", "", "0");
         private bool _noDocumentSelected = true;
+        private List<Document> _oldVersions = new List<Document>();
 
         public List<Document> Documents
         {
@@ -17,6 +17,16 @@ namespace YouLookGoodInPrint.Client
             set
             {
                 _documents = value;
+                NotifyStateChanged();
+            }
+        }
+
+        public List<Document> OldVersions
+        {
+            get => _oldVersions;
+            set
+            {
+                _oldVersions = value;
                 NotifyStateChanged();
             }
         }
@@ -55,12 +65,13 @@ namespace YouLookGoodInPrint.Client
                     return doc;
                 }
 
-            return new Document("", "", "");
+            return new Document("", "", "", "0");
         }
 
         public void SelectDocument(Document document)
         {
-            this.CurrentDocument = document;
+            this._currentDocument = document;
+            this.SetOldVersions(document.Id);
             NotifyStateChanged();
         }
 
@@ -72,6 +83,21 @@ namespace YouLookGoodInPrint.Client
                     Documents.Remove(doc);
                     NotifyStateChanged();
                 }
+        }
+
+        public void SetOldVersions(string id)
+        {
+            List<Document> oldVers = new List<Document>();
+
+            foreach (Document doc in _documents)
+            {
+                if (doc.ParentId == id)
+                    oldVers.Add(doc);
+            }
+
+            oldVers.Sort((x, y) => DateTime.Compare(y.CreationDate, x.CreationDate));
+            _oldVersions = oldVers;
+            NotifyStateChanged();
         }
 
         public void DeleteDocument(Document document)

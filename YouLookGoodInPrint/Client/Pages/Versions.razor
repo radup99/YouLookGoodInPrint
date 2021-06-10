@@ -1,0 +1,75 @@
+﻿@page "/versions"
+@using System.Net.Http.Json
+@using YouLookGoodInPrint.Shared
+@inject HttpClient Http
+@inject TokenContainer tokenContainer
+@inject DocumentsContainer docContainer
+@inject PrintContainer pContainer
+@inject NavigationManager UriHelper
+
+<h3>Versions</h3>
+
+@{
+    @if (docContainer.OldVersions.Count() == 0)
+    {
+        <p><em>No previous versions exist.</em></p>
+    }
+
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Modification Date</th>
+                    <th>Title</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var doc in docContainer.OldVersions)
+                {
+                    <tr>
+                        <td>@doc.CreationDate.ToString()</td>
+                        <td>@doc.Name</td>
+                        <td>
+                            <button class="btn btn-primary" @onclick="() => Restore(doc.Id)">Restore</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <p>@saveStatus</p>
+        }
+    }
+
+@code {
+    string saveStatus = "";
+
+    public async Task Restore(string verId)
+    {
+        Document version = docContainer.GetById(verId);
+        docContainer.CurrentDocument.Name = version.Name;
+        docContainer.CurrentDocument.Content = version.Content;
+
+        HttpResponseMessage response;
+        ServerMessage message;
+        ItemData<Document> docData = new ItemData<Document>(docContainer.CurrentDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
+
+        response = await Http.PostAsJsonAsync<ItemData<Document>>("Documents", docData);
+        message = await response.Content.ReadAsAsync<ServerMessage>();
+
+        if (message.Type == "error")
+        {
+            saveStatus = "Couldn't restore version!";
+            return;
+        }
+
+        else
+        {
+            saveStatus = message.Message;
+            return;
+        }
+
+    }
+}

@@ -74,7 +74,7 @@
     {
         HttpResponseMessage response;
         ServerMessage message;
-        Document newDocument = new Document(fileName, tokenContainer.UserName, storedName);
+        Document newDocument = new Document(fileName, tokenContainer.UserName, storedName, "0");
         ItemData<Document> docData = new ItemData<Document>(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
 
         response = await Http.PostAsJsonAsync<ItemData<Document>>("Documents", docData);

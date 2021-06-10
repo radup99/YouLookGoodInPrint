@@ -32,17 +32,19 @@
             </thead>
             <tbody>
                 @foreach (var doc in docContainer.Documents)
-                {
-                    <tr>
-                        <td>@doc.Name</td>
-                        <td>@doc.CreationDate.ToShortDateString()</td>
-                        <td>
-                            <button class="btn btn-primary" @onclick="() => Edit(doc.Id)">Edit</button>
-                            <button class="btn btn-primary" @onclick="() => Delete(doc.Id)">Delete</button>
-                            <button class="btn btn-primary" @onclick="() => Print(doc.Name)">Print</button>
-                        </td>
-                    </tr>
-                }
+                    if (doc.ParentId == "0")
+                    {
+                        <tr>
+                            <td>@doc.Name</td>
+                            <td>@doc.CreationDate.ToShortDateString()</td>
+                            <td>
+                                <button class="btn btn-primary" @onclick="() => Edit(doc.Id)">Edit</button>
+                                <button class="btn btn-primary" @onclick="() => Delete(doc.Id)">Delete</button>
+                                <button class="btn btn-primary" @onclick="() => Print(doc.Name)">Print</button>
+                                <button class="btn btn-primary" @onclick="() => Restore(doc.Id)">Versions</button>
+                            </td>
+                        </tr>
+                    }
             </tbody>
         </table>
 
@@ -103,6 +105,13 @@
         status = "Document deleted.";
     }
 
+    public async Task Restore(string id)
+    {
+        Document document = docContainer.GetById(id);
+        docContainer.SelectDocument(document);
+        UriHelper.NavigateTo("versions");
+    }
+
     public async Task AccesUpload()
     {
         UriHelper.NavigateTo("upload");
@@ -113,7 +122,7 @@
         HttpResponseMessage response;
         ServerMessage message;
 
-        Document newDocument = new Document("New Document", tokenContainer.UserName, "");
+        Document newDocument = new Document("New Document", tokenContainer.UserName, "", "0");
         ItemData<Document> docData = new ItemData<Document>(newDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
 
 

@@ -118,17 +118,26 @@
 
     public async Task SaveModifiedDocument()
     {
+        Document oldVersion = new Document(docContainer.CurrentDocument.Name, docContainer.CurrentDocument.Author,
+                                           docContainer.CurrentDocument.Content, docContainer.CurrentDocument.Id);
+
+        docContainer.AddDocument(oldVersion);
         docContainer.CurrentDocument.Name = titlebarContent;
         docContainer.CurrentDocument.Content = textAreaContent;
         docContainer.SortByName();
 
-        HttpResponseMessage response;
-        ServerMessage message;
+        HttpResponseMessage response1, response2;
+        ServerMessage message1, message2;
         ItemData<Document> docData = new ItemData<Document>(docContainer.CurrentDocument, tokenContainer.UserName, tokenContainer.Token, "modify");
-        response = await Http.PostAsJsonAsync<ItemData<Document>>("Documents", docData);
-        message = await response.Content.ReadAsAsync<ServerMessage>();
+        ItemData<Document> oldVerData = new ItemData<Document>(oldVersion, tokenContainer.UserName, tokenContainer.Token, "create");
 
-        if (message.Type == "error")
+        response1 = await Http.PostAsJsonAsync<ItemData<Document>>("Documents", docData);
+        message1 = await response1.Content.ReadAsAsync<ServerMessage>();
+
+        response2 = await Http.PostAsJsonAsync<ItemData<Document>>("Documents", oldVerData);
+        message2 = await response2.Content.ReadAsAsync<ServerMessage>();
+
+        if (message1.Type == "error" || message2.Type == "error")
         {
             saveStatus = "Couldn't save document!";
             return;
@@ -136,7 +145,7 @@
 
         else
         {
-            saveStatus = message.Message;
+            saveStatus = message1.Message;
             return;
         }
 
@@ -144,7 +153,7 @@
 
     public async Task SaveNewDocument()
     {
-        Document newDocument = new Document(titlebarContent, tokenContainer.UserName, textAreaContent);
+        Document newDocument = new Document(titlebarContent, tokenContainer.UserName, textAreaContent, "0");
 
         HttpResponseMessage response;
         ServerMessage message;
