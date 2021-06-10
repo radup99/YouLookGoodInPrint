@@ -12,3 +12,7 @@ Techonologies used:
 - Blazor WebAssembly (frontend)
 - Entity Framework (ORM)
 - SQLite
+
+
+
+![PNG](https://i.imgur.com/mmpGKIy.png)
